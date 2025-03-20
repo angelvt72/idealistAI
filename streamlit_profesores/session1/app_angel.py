@@ -97,9 +97,7 @@ with col01:
     st.write("# Deep Learning Lab - Session 1")  # Título de la aplicación
 with col03:
     # Mostramos una imagen del logo de ICAI
-    st.image(
-        "/Users/angel/Desktop/MASTER/SEGUNDO_CUATRI/ML2/idealistAI/streamlit_profesores/img/icai.png"
-    )
+    st.image("streamlit_profesores/img/icai.png")
 
 st.write("## Convolution Filters")  # Subtítulo de la aplicación
 
