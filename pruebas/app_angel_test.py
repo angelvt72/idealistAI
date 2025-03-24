@@ -15,13 +15,12 @@ def check_data_directories():
     # Definir las rutas de los directorios de training y validation
     training_data_path = os.path.abspath(
         os.path.join(
-            os.path.dirname(__file__), "../", "models_generator", "dataset", "training"
+            os.path.dirname(__file__), "models_generator", "dataset", "training"
         )
     )
     validation_data_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "../",
             "models_generator",
             "dataset",
             "validation",
