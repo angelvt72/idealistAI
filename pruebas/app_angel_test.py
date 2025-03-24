@@ -11,37 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from models_generator.PredictionProcess import prediction_process
 
 
-def check_data_directories():
-    # Definir las rutas de los directorios de training y validation
-    training_data_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__), "models_generator", "dataset", "training"
-        )
-    )
-    validation_data_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            "models_generator",
-            "dataset",
-            "validation",
-        )
-    )
-
-    # Comprobar si los directorios existen
-    if not os.path.exists(training_data_path):
-        st.error(f"El directorio de entrenamiento no existe en: {training_data_path}")
-        return False
-    if not os.path.exists(validation_data_path):
-        st.error(f"El directorio de validación no existe en: {validation_data_path}")
-        return False
-    return True
-
-
 def main():
-    # Comprobar si las carpetas de datos existen
-    if not check_data_directories():
-        return  # Detener la ejecución si los directorios no existen
-
     # Título de la aplicación
     st.title("Clasificación de Imágenes con Transfer Learning")
 
