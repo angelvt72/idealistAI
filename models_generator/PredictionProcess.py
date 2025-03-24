@@ -1,8 +1,10 @@
 import torch
-from PIL import Image
 import torchvision.transforms as transforms
+from PIL import Image
+import os
+
+from models_generator.cnn import CNN, load_data
 import torchvision.models as models
-from cnn import CNN, load_data
 
 
 def load_model(model_path, num_classes):
@@ -98,7 +100,7 @@ def predict(model, image_tensor, class_names):
     return results
 
 
-def PredictionProcess(
+def prediction_process(
     image_path,
     model_path=None,
     train_dir="./dataset/training",
@@ -134,9 +136,5 @@ def PredictionProcess(
 
     # Get predictions
     results = predict(model, image_tensor, class_names)
-
-    print("Top 3 predictions:")
-    for cls, prob in results.items():
-        print(f"{cls}: {prob:.4f}")
 
     return results

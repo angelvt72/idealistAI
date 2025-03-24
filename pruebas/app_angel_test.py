@@ -3,38 +3,8 @@ from PIL import Image
 import tempfile
 import os
 
-from models_generator.PredictionProcess import PredictionProcess
-
-
-def predict_image(uploaded_image):
-    """
-    Helper function to process the uploaded image and make predictions.
-
-    Args:
-        uploaded_image (UploadedFile): Image uploaded through Streamlit
-
-    Returns:
-        tuple: Dictionary of predictions and top prediction
-    """
-    # Create a temporary file to save the uploaded image
-    with tempfile.NamedTemporaryFile(
-        delete=False, suffix=os.path.splitext(uploaded_image.name)[1]
-    ) as temp_file:
-        temp_file.write(uploaded_image.getvalue())
-        temp_file_path = temp_file.name
-
-    try:
-        # Call PredictionProcess with the temporary file path
-        results = PredictionProcess(temp_file_path)
-
-        # Get the top prediction (first item in the dictionary)
-        top_prediction = list(results.items())[0]
-
-        return results, top_prediction
-
-    finally:
-        # Ensure the temporary file is deleted
-        os.unlink(temp_file_path)
+# Importar la función de predicción desde tu pipeline
+from prediction_pipeline import prediction_process
 
 
 def main():
@@ -57,27 +27,49 @@ def main():
         if st.button("Predecir clase"):
             with st.spinner("Realizando predicción..."):
                 try:
-                    # Llamar a la función de predicción
-                    results, (top_class, top_prob) = predict_image(uploaded_image)
+                    # Crear un archivo temporal para la imagen
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=os.path.splitext(uploaded_image.name)[1]
+                    ) as temp_file:
+                        temp_file.write(uploaded_image.getvalue())
+                        temp_file_path = temp_file.name
 
-                    # Crear una columna para mostrar los resultados
-                    st.subheader("Resultados de la Predicción")
+                    try:
+                        # Llamar a la función de predicción
+                        results, class_names = prediction_process(temp_file_path)
 
-                    # Mostrar la predicción principal
-                    st.markdown(f"**Clase predicha:** {top_class}")
-                    st.markdown(f"**Probabilidad:** {top_prob:.4f}")
+                        # Ordenar resultados por probabilidad descendente
+                        sorted_results = dict(
+                            sorted(results.items(), key=lambda x: x[1], reverse=True)
+                        )
 
-                    # Mostrar todas las predicciones en una tabla
-                    st.subheader("Top 3 Predicciones")
-                    prediction_data = [
-                        {"Clase": cls, "Probabilidad": prob}
-                        for cls, prob in results.items()
-                    ]
-                    st.table(prediction_data)
+                        # Crear una columna para mostrar los resultados
+                        st.subheader("Resultados de la Predicción")
 
-                    # Gráfico de barras de probabilidades
-                    st.subheader("Distribución de Probabilidades")
-                    st.bar_chart({cls: prob for cls, prob in results.items()})
+                        # Mostrar la predicción principal
+                        top_class = list(sorted_results.keys())[0]
+                        top_prob = sorted_results[top_class]
+
+                        st.markdown(f"**Clase predicha:** {top_class}")
+                        st.markdown(f"**Probabilidad:** {top_prob:.4f}")
+
+                        # Mostrar todas las predicciones en una tabla
+                        st.subheader("Top 3 Predicciones")
+                        prediction_data = [
+                            {"Clase": cls, "Probabilidad": prob}
+                            for cls, prob in sorted_results.items()
+                        ]
+                        st.table(prediction_data)
+
+                        # Gráfico de barras de probabilidades
+                        st.subheader("Distribución de Probabilidades")
+                        st.bar_chart(
+                            {cls: prob for cls, prob in sorted_results.items()}
+                        )
+
+                    finally:
+                        # Eliminar el archivo temporal
+                        os.unlink(temp_file_path)
 
                 except Exception as e:
                     st.error(f"Error en la predicción: {str(e)}")
