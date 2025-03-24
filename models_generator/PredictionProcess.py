@@ -103,8 +103,8 @@ def predict(model, image_tensor, class_names):
 def prediction_process(
     image_path,
     model_path=None,
-    train_dir="./dataset/training",
-    valid_dir="./dataset/validation",
+    train_dir="../models_generator/dataset/training",
+    valid_dir="../models_generator/dataset/validation",
 ):
     """
     Complete prediction pipeline for a single image.
@@ -126,7 +126,7 @@ def prediction_process(
 
     # If no model path provided, use a default path
     if model_path is None:
-        model_path = "./models/resnet50-2epoch.pt"
+        model_path = "../models_generator/models/resnet50-2epoch.pt"
 
     # Load the model
     model = load_model(model_path, num_classes)
