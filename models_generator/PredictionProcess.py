@@ -1,94 +1,142 @@
 import torch
 from PIL import Image
 import torchvision.transforms as transforms
-from cnn import *
 import torchvision.models as models
+from cnn import CNN, load_data
 
 
-def load_model(model_path):
+def load_model(model_path, num_classes):
     """
-    Carga el state_dict guardado en el fichero .pt y lo carga en la arquitectura ResNet50.
-    Luego, pone el modelo en modo evaluación.
+    Load a pre-trained ResNet50 model with the specified number of classes.
+
+    Args:
+        model_path (str): Path to the saved model weights
+        num_classes (int): Number of classes in the model
+
+    Returns:
+        torch.nn.Module: Loaded model
     """
-    # Instanciar la arquitectura de ResNet50 (sin pesos pre-entrenados)
-    model = models.resnet50(pretrained=False)
-    
-    # Cargar el state_dict
-    state_dict = torch.load(model_path, map_location=torch.device('cpu'))
+    # Initialize the base model with default weights
+    base_model = models.resnet50(weights="DEFAULT")
+
+    # Create the CNN model with the same architecture as during training
+    model = CNN(base_model, num_classes)
+
+    # Load the saved state dictionary
+    state_dict = torch.load(model_path)
+
+    # Load the weights into the model
     model.load_state_dict(state_dict)
-    
-    # Poner el modelo en modo evaluación
+
+    # Set the model to evaluation mode
     model.eval()
+
     return model
+
 
 def process_image(image_path):
     """
-    Abre la imagen, la convierte a escala de grises y la redimensiona a 224x224.
-    Luego la transforma en un tensor adecuado para el modelo.
+    Prepare the image for model inference.
+
+    Args:
+        image_path (str): Path to the input image
+
+    Returns:
+        torch.Tensor: Processed image tensor
     """
-    # Abrir imagen
+    # Define transforms for preprocessing
+    transform = transforms.Compose(
+        [
+            transforms.Resize((224, 224)),  # Resize to match model's expected input
+            transforms.ToTensor(),  # Convert to tensor
+            transforms.Normalize(  # Normalization used in pre-trained models
+                mean=[0.485, 0.456, 0.406],  # ImageNet mean
+                std=[0.229, 0.224, 0.225],  # ImageNet std
+            ),
+        ]
+    )
+
+    # Open and transform the image
     image = Image.open(image_path)
-    # Convertir a escala de grises (modo 'L' para imágenes en blanco y negro)
-    image = image.convert("L")
-    # Redimensionar a 224x224
-    image = image.resize((224, 224))
-    
-    # Convertir imagen a tensor; ToTensor() normaliza a [0,1] y cambia la forma a (C, H, W)
-    transform = transforms.ToTensor()
-    image_tensor = transform(image)
-    
-    # Añadir dimensión de batch: forma final (1, C, H, W)
-    image_tensor = image_tensor.unsqueeze(0)
+
+    # Handle grayscale images by converting to RGB
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+
+    # Apply transforms and add batch dimension
+    image_tensor = transform(image).unsqueeze(0)
+
     return image_tensor
+
 
 def predict(model, image_tensor, class_names):
     """
-    Realiza la inferencia con el modelo, aplica softmax para obtener probabilidades
-    y extrae las 3 predicciones más altas.
-    Devuelve un diccionario {clase: probabilidad}.
+    Perform inference and return top predictions.
+
+    Args:
+        model (torch.nn.Module): Trained model
+        image_tensor (torch.Tensor): Preprocessed image
+        class_names (list): List of class names
+
+    Returns:
+        dict: Top predictions with their probabilities
     """
     with torch.no_grad():
         output = model(image_tensor)
-    
-    # Aplicar softmax para convertir los logits en probabilidades
+
+    # Apply softmax to get probabilities
     probabilities = torch.softmax(output, dim=1)
-    
-    # Obtener los índices y valores de las 3 predicciones más altas
+
+    # Get top 3 predictions
     top_probs, top_indices = torch.topk(probabilities, 3)
     top_probs = top_probs.squeeze().tolist()
     top_indices = top_indices.squeeze().tolist()
-    
-    # En caso de que solo se devuelva un valor, asegurarse de trabajar con listas
-    if isinstance(top_indices, int):
-        top_indices = [top_indices]
-        top_probs = [top_probs]
-    
-    # Crear el diccionario de resultados mapeando índices a nombres de clase
-    results = { class_names[i]: top_probs[idx] for idx, i in enumerate(top_indices) }
+
+    # Create results dictionary
+    results = {class_names[idx]: prob for idx, prob in zip(top_indices, top_probs)}
+
     return results
 
-def PredictionProcess(image_path):
-    
-    # Procesar la imagen
-    image_tensor = process_image(image_path)
-    # Cargar el modelo
-    model = load_model(r"C:\Users\pablo\MBD_ICAI_repo\MBD_ICAI\Machine_Learning_2_ML2\idealistAI\models_generator\models\resnet50-2epoch.pt")
-    # Obtener las clases del modelo
-    train_dir = './dataset/training'
-    valid_dir = './dataset/validation'
-    train_loader, valid_loader, num_classes = load_data(train_dir, 
-                                                    valid_dir, 
-                                                    batch_size=32, 
-                                                    img_size=224) # ResNet50 requires 224x224 images
+
+def PredictionProcess(
+    image_path,
+    model_path=None,
+    train_dir="./dataset/training",
+    valid_dir="./dataset/validation",
+):
+    """
+    Complete prediction pipeline for a single image.
+
+    Args:
+        image_path (str): Path to the image to predict
+        model_path (str, optional): Path to the saved model. Defaults to None.
+        train_dir (str, optional): Path to training dataset. Defaults to './dataset/training'.
+        valid_dir (str, optional): Path to validation dataset. Defaults to './dataset/validation'.
+
+    Returns:
+        dict: Top predictions with their probabilities
+    """
+    # Load dataset to get class names and number of classes
+    train_loader, valid_loader, num_classes = load_data(
+        train_dir, valid_dir, batch_size=32, img_size=224
+    )
     class_names = train_loader.dataset.classes
-    # Obtener predicciones
+
+    # If no model path provided, use a default path
+    if model_path is None:
+        model_path = "./models/resnet50-2epoch.pt"
+
+    # Load the model
+    model = load_model(model_path, num_classes)
+
+    # Process the image
+    image_tensor = process_image(image_path)
+
+    # Get predictions
     results = predict(model, image_tensor, class_names)
-    
-    print("Top 3 predicciones:")
-    print(results)
-    
+
+    print("Top 3 predictions:")
+    for cls, prob in results.items():
+        print(f"{cls}: {prob:.4f}")
+
     return results
-
-
-
-resultados = PredictionProcess(r"C:\Users\pablo\MBD_ICAI_repo\MBD_ICAI\Machine_Learning_2_ML2\idealistAI\models_generator\dataset\training\Bedroom\image_0003.jpg")
