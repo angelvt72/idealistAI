@@ -174,4 +174,4 @@ cython_debug/
 .pypirc
 
 # Imagenes para generar modelo
-*.jpg
+models_generator/dataset/**/*.jpg
