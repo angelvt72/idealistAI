@@ -6,6 +6,10 @@ import os
 from models_generator.cnn import CNN, load_data
 import torchvision.models as models
 
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 
 def load_model(model_path, num_classes):
     """
@@ -103,38 +107,32 @@ def predict(model, image_tensor, class_names):
 def prediction_process(
     image_path,
     model_path=None,
-    train_dir="models_generator/dataset/training",
-    valid_dir="models_generator/dataset/validation",
+    train_dir=None,
+    valid_dir=None,
 ):
-    """
-    Complete prediction pipeline for a single image.
+    # Establece las rutas absolutas si no se proporcionan
+    if train_dir is None:
+        train_dir = os.path.join(BASE_DIR, "models_generator", "dataset", "training")
+    if valid_dir is None:
+        valid_dir = os.path.join(BASE_DIR, "models_generator", "dataset", "validation")
+    if model_path is None:
+        model_path = os.path.join(
+            BASE_DIR, "models_generator", "models", "resnet50-2epoch.pt"
+        )
 
-    Args:
-        image_path (str): Path to the image to predict
-        model_path (str, optional): Path to the saved model. Defaults to None.
-        train_dir (str, optional): Path to training dataset. Defaults to './dataset/training'.
-        valid_dir (str, optional): Path to validation dataset. Defaults to './dataset/validation'.
-
-    Returns:
-        dict: Top predictions with their probabilities
-    """
-    # Load dataset to get class names and number of classes
+    # Cargar dataset para obtener nombres de clases y número de clases
     train_loader, valid_loader, num_classes = load_data(
         train_dir, valid_dir, batch_size=32, img_size=224
     )
     class_names = train_loader.dataset.classes
 
-    # If no model path provided, use a default path
-    if model_path is None:
-        model_path = "models_generator/models/resnet50-2epoch.pt"
-
-    # Load the model
+    # Cargar el modelo
     model = load_model(model_path, num_classes)
 
-    # Process the image
+    # Procesar la imagen
     image_tensor = process_image(image_path)
 
-    # Get predictions
+    # Obtener las predicciones
     results = predict(model, image_tensor, class_names)
 
     return results
