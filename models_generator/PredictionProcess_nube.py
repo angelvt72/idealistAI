@@ -2,13 +2,8 @@ import torch
 import torchvision.transforms as transforms
 from PIL import Image
 import os
-
 from models_generator.cnn import CNN, load_data
 import torchvision.models as models
-
-import os
-
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
 def load_model(model_path, num_classes):
@@ -50,7 +45,6 @@ def process_image(image_path):
     Returns:
         torch.Tensor: Processed image tensor
     """
-    # Define transforms for preprocessing
     transform = transforms.Compose(
         [
             transforms.Resize((224, 224)),  # Resize to match model's expected input
@@ -104,23 +98,16 @@ def predict(model, image_tensor, class_names):
     return results
 
 
-def prediction_process(
-    image_path,
-    model_path=None,
-    train_dir=None,
-    valid_dir=None,
-):
-    # Establece las rutas absolutas si no se proporcionan
+def prediction_process(image_path, model_path=None, train_dir=None, valid_dir=None):
+    # Si no se proporcionan rutas, usar las nuevas rutas relativas
     if train_dir is None:
-        train_dir = os.path.join(BASE_DIR, "models_generator", "dataset", "training")
+        train_dir = os.path.join("models_generator", "dataset", "training")
     if valid_dir is None:
-        valid_dir = os.path.join(BASE_DIR, "models_generator", "dataset", "validation")
+        valid_dir = os.path.join("models_generator", "dataset", "validation")
     if model_path is None:
-        model_path = os.path.join(
-            BASE_DIR, "models_generator", "models", "resnet50-2epoch.pt"
-        )
+        model_path = os.path.join("models_generator", "models", "resnet50-2epoch.pt")
 
-    # Cargar dataset para obtener nombres de clases y número de clases
+    # Cargar dataset para obtener nombrses de clases y número de clases
     train_loader, valid_loader, num_classes = load_data(
         train_dir, valid_dir, batch_size=32, img_size=224
     )

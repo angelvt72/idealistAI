@@ -1,13 +1,7 @@
 import streamlit as st
 from PIL import Image
-import sys
 import os
-import tempfile  # Se importa para manejar archivos temporales
-
-current_path = os.path.dirname(os.path.abspath(__file__))
-parent_path = os.path.abspath(os.path.join(current_path, ".."))
-if parent_path not in sys.path:
-    sys.path.insert(0, parent_path)
+import tempfile  # Para manejar archivos temporales
 
 # Importar la función de predicción desde models_generator
 from models_generator.PredictionProcess import prediction_process
