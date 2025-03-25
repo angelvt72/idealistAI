@@ -1,9 +1,11 @@
 import torch
 import torchvision.transforms as transforms
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import os
-from models_generator.cnn import CNN, load_data
+import streamlit as st
+import tempfile
 import torchvision.models as models
+from models_generator.cnn import CNN, load_data
 
 
 def load_model(model_path, num_classes):
@@ -45,6 +47,27 @@ def process_image(image_path):
     Returns:
         torch.Tensor: Processed image tensor
     """
+    # Valid extensions for the image
+    valid_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"]
+
+    # Check if the image has a valid extension
+    if not any(image_path.endswith(ext) for ext in valid_extensions):
+        raise ValueError(
+            f"Formato de archivo no válido: {image_path}. Las extensiones soportadas son: {', '.join(valid_extensions)}."
+        )
+
+    try:
+        # Open and transform the image
+        image = Image.open(image_path)
+    except UnidentifiedImageError:
+        print(f"Error: No se pudo abrir la imagen {image_path}")
+        return None
+
+    # Handle grayscale images by converting to RGB
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+
+    # Define the transformation
     transform = transforms.Compose(
         [
             transforms.Resize((224, 224)),  # Resize to match model's expected input
@@ -55,9 +78,6 @@ def process_image(image_path):
             ),
         ]
     )
-
-    # Open and transform the image
-    image = Image.open(image_path)
 
     # Apply transforms and add batch dimension
     image_tensor = transform(image).unsqueeze(0)
@@ -103,7 +123,7 @@ def prediction_process(image_path, model_path=None, train_dir=None, valid_dir=No
     if model_path is None:
         model_path = os.path.join("models_generator", "models", "resnet50-2epoch.pt")
 
-    # Cargar dataset para obtener nombrses de clases y número de clases
+    # Cargar dataset para obtener nombres de clases y número de clases
     train_loader, valid_loader, num_classes = load_data(
         train_dir, valid_dir, batch_size=32, img_size=224
     )
@@ -114,6 +134,12 @@ def prediction_process(image_path, model_path=None, train_dir=None, valid_dir=No
 
     # Procesar la imagen
     image_tensor = process_image(image_path)
+
+    # Verificar si la imagen se procesó correctamente
+    if image_tensor is None:
+        return {
+            "error": "No se pudo procesar la imagen. Verifica el formato o la ruta del archivo."
+        }
 
     # Obtener las predicciones
     results = predict(model, image_tensor, class_names)
