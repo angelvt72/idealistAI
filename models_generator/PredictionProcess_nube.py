@@ -59,10 +59,6 @@ def process_image(image_path):
     # Open and transform the image
     image = Image.open(image_path)
 
-    # Handle grayscale images by converting to RGB
-    if image.mode != "RGB":
-        image = image.convert("RGB")
-
     # Apply transforms and add batch dimension
     image_tensor = transform(image).unsqueeze(0)
 
