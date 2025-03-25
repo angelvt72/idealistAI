@@ -4,9 +4,10 @@ import sys
 import os
 import tempfile  # Se importa para manejar archivos temporales
 
-# Añadir el directorio raíz del proyecto a sys.path
-# Suponiendo que este archivo se encuentra en el directorio "pruebas"
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+current_path = os.path.dirname(os.path.abspath(__file__))
+parent_path = os.path.abspath(os.path.join(current_path, ".."))
+if parent_path not in sys.path:
+    sys.path.insert(0, parent_path)
 
 # Importar la función de predicción desde models_generator
 from models_generator.PredictionProcess import prediction_process
