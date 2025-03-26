@@ -4,7 +4,7 @@ import os
 import tempfile  # Para manejar archivos temporales
 
 # Importar la función de predicción desde models_generator
-from models_generator.PredictionProcess_nube import prediction_process
+from prediction_pipeline_nube import prediction_process
 
 st.title("Clasificación de Imágenes con Transfer Learning")
 
