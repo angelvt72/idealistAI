@@ -1,31 +1,28 @@
 import streamlit as st
 from PIL import Image
-import os
-import tempfile  # Para manejar archivos temporales
-
-# Importar la función de predicción desde models_generator
-from prediction_pipeline_nube import prediction_process
+from prediction_pipeline_nube import prediction_process, process_image
 
 st.title("Clasificación de Imágenes con Transfer Learning")
 
-# Streamlit interface
 uploaded_file = st.file_uploader(
     "Elige una imagen", type=["jpg", "jpeg", "png", "bmp", "tif", "tiff", "webp"]
 )
 
 if uploaded_file is not None:
-    # Guardar archivo cargado en un directorio temporal
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        temp_file.write(uploaded_file.read())
-        temp_file_path = temp_file.name
+    # Cargar imagen en memoria y mostrarla
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Imagen cargada", use_column_width=True)
 
-    # Realizar la predicción
-    results = prediction_process(temp_file_path)
+    # Procesar la imagen
+    image_tensor = process_image(image)
 
-    # Mostrar resultados
-    if "error" in results:
-        st.error(results["error"])
-    else:
-        st.write("Predicciones:")
+    if image_tensor is not None:
+        # Hacer predicción
+        results = prediction_process(image_tensor)
+
+        # Mostrar resultados
+        st.write("### Predicciones:")
         for class_name, prob in results.items():
-            st.write(f"{class_name}: {prob:.4f}")
+            st.write(f"**{class_name}**: {prob:.4f}")
+    else:
+        st.error("No se pudo procesar la imagen. Intenta con otro archivo.")
