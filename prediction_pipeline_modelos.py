@@ -33,6 +33,7 @@ def load_model(model_name, model_path, num_classes):
         )
     else:
         raise ValueError(f"Modelo no soportado: {model_name}")
+
     # Cargar los pesos entrenados previamente
     try:
         state_dict = torch.load(model_path, map_location=torch.device("cpu"))
