@@ -3,7 +3,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 import os
 import torchvision.models as models
-from models_generator.cnn import CNN
+import torch.nn as nn
 
 # Definir transformaciones para la imagen
 transform = transforms.Compose(
@@ -15,16 +15,25 @@ transform = transforms.Compose(
 
 
 def load_model(model_path, num_classes):
-    base_model = models.resnet50(weights="DEFAULT")
-    model = CNN(base_model, num_classes)
-    state_dict = torch.load(model_path, map_location=torch.device("cpu"))
-    model.load_state_dict(state_dict)
-    model.eval()
-    return model
+    # Cargar el modelo EfficientNet sin pesos preentrenados, ya que se usaron pesos personalizados
+    base_model = models.efficientnet_b0(weights="DEFAULT")
+    base_model.classifier[1] = nn.Linear(
+        base_model.classifier[1].in_features, num_classes
+    )
+
+    # Cargar los pesos entrenados previamente
+    try:
+        state_dict = torch.load(model_path, map_location=torch.device("cpu"))
+        base_model.load_state_dict(state_dict)
+        base_model.eval()
+        return base_model
+    except Exception as e:
+        print(f"Error al cargar el modelo: {e}")
+        return None
 
 
 def process_image(image):
-    """Convierte una imagen en memoria a un tensor compatible con ResNet50."""
+    """Convierte una imagen en memoria a un tensor compatible con el modelo."""
     try:
         image = image.convert("RGB")  # Convertir a RGB si no lo está
         image_tensor = transform(image).unsqueeze(0)  # Añadir dimensión de batch
@@ -48,7 +57,7 @@ def predict(model, image_tensor, class_names):
 
 
 def prediction_process(image_tensor):
-    model_path = os.path.join("models_generator", "models", "resnet50-2epoch.pt")
+    model_path = os.path.join("models_generator", "models", "efficientnet_rank_7.pt")
     num_classes = 15
     class_names = [
         "Bedroom",
@@ -67,5 +76,11 @@ def prediction_process(image_tensor):
         "Suburb",
         "TallBuilding",
     ]
+
     model = load_model(model_path, num_classes)
+
+    # Verificar si el modelo se cargó correctamente
+    if model is None:
+        return {"error": "No se pudo cargar el modelo."}
+
     return predict(model, image_tensor, class_names)
