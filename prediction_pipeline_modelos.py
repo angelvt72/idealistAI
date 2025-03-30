@@ -7,12 +7,12 @@ import torch.nn as nn
 import streamlit as st
 
 # Definir transformaciones para la imagen
-transform = transforms.Compose(
-    [
-        transforms.Resize((224, 224)),  # Cambiar el tamaño de la imagen a 224x224 (OJO: podría cambiar según el modelo que queramos [futuro])
-        transforms.ToTensor(),  # Convertir la imagen a tensor normalizado
-    ]
-)
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], 
+                         std=[0.229, 0.224, 0.225])
+])
 
 
 def load_model(model_name, model_path, num_classes):
@@ -40,21 +40,38 @@ def load_model(model_name, model_path, num_classes):
         base_model = models.efficientnet_b0(weights="IMAGENET1K_V1")
     elif model_name == "efficientnet_rank_7":
         base_model = models.efficientnet_b0(weights="IMAGENET1K_V1")
-    else:
-        raise ValueError(f"Modelo no soportado: {model_name}")
+    elif model_name == "convnext_large_1_epoch":
+        base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.IMAGENET1K_V1)
+    elif model_name == "convnext_large_epoch_3":
+        base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.DEFAULT)
 
     # Modificar la capa de salida para adaptarse al número de clases
     if model_name in ["efficientnet_rank_0", "efficientnet_rank_7"]:
         base_model.classifier[1] = nn.Linear(
             base_model.classifier[1].in_features, num_classes
         )
+
+    elif model_name == "convnext_large_1_epoch":
+        in_features = base_model.classifier[-1].in_features
+        classifier = torch.nn.Sequential(
+        torch.nn.Linear(in_features, 512),
+        torch.nn.ReLU(),
+        torch.nn.Dropout(0.2),
+        torch.nn.Linear(512, num_classes)
+        )
+        base_model.classifier[-1] = classifier
+
+    elif model_name == "convnext_large_epoch_3":
+        base_model.classifier[2] = nn.Linear(base_model.classifier[2].in_features, num_classes)
+    
+
     else:
         raise ValueError(f"Modelo no soportado: {model_name}")
 
     # Cargar los pesos entrenados previamente
     try:
         state_dict = torch.load(model_path, map_location=torch.device("cpu"))
-        base_model.load_state_dict(state_dict)
+        base_model.load_state_dict(state_dict, strict=False)
         base_model.eval()
         return base_model
     except Exception as e:
