@@ -16,7 +16,7 @@ st.write("Sube una imagen y el modelo te dirá qué es con su probabilidad.")
 
 # Selección del modelo
 model_name = st.selectbox(
-    "Elige el modelo", ["efficientnet_rank_0", "efficientnet_rank_7"]
+    "Elige el modelo", ["efficientnet_rank_0", "efficientnet_rank_7", "convnext_large_epoch_3", "convnext_large_1_epoch"]
 )
 
 # Subir imagen

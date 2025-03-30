@@ -39,7 +39,7 @@ def load_model(model_name, model_path, num_classes):
     if model_name == "efficientnet_rank_0":
         base_model = models.efficientnet_b0(weights="IMAGENET1K_V1")
     elif model_name == "efficientnet_rank_7":
-        base_model = models.efficientnet_b0(weights="IMAGENET1K_V1")
+        base_model = models.efficientnet_b7(weights="DEFAULT")
     elif model_name == "convnext_large_1_epoch":
         base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.IMAGENET1K_V1)
     elif model_name == "convnext_large_epoch_3":
@@ -149,7 +149,7 @@ def prediction_process(image_tensor, model_name):
             - Si ocurre un error al cargar el modelo, el diccionario contiene la clave "error" con un mensaje descriptivo.
     """
 
-    model_path = os.path.join("models_generator", "models", f"{model_name}.pt")
+    model_path = os.path.join("models_generator", "models", f"{model_name}.pt" if model_name != "convnext_large_1_epoch" else f"{model_name}.pth")
     num_classes = 15
     class_names = [
         "Bedroom",
