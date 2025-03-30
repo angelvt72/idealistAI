@@ -10,6 +10,7 @@ from prediction_pipeline_modelos import prediction_process, process_image
 # Configuración de la página de Streamlit
 st.set_page_config(page_title="Clasificación de Imágenes", layout="centered")
 
+# Encabezado de la aplicación
 st.title("🔍 Clasificación de Imágenes con IA")
 st.write("Sube una imagen y el modelo te dirá qué es con su probabilidad.")
 
@@ -23,14 +24,19 @@ uploaded_file = st.file_uploader(
     "Elige una imagen", type=["jpg", "jpeg", "png", "bmp", "tif", "tiff", "webp"]
 )
 
+# Si se subió una imagen, procesarla y hacer la predicción
 if uploaded_file is not None:
+
+    # Abrir la imagen y mostrarla
     image = Image.open(uploaded_file)
     st.image(image, caption="Imagen cargada", use_column_width=True)
 
     # Procesar la imagen
     image_tensor = process_image(image)
 
+    # Verificar si la imagen se procesó correctamente
     if image_tensor is not None:
+        
         # Obtener predicciones
         results = prediction_process(image_tensor, model_name)
 

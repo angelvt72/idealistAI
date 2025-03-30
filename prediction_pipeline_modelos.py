@@ -9,13 +9,30 @@ import streamlit as st
 # Definir transformaciones para la imagen
 transform = transforms.Compose(
     [
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
+        transforms.Resize((224, 224)),  # Cambiar el tamaño de la imagen a 224x224 (OJO: podría cambiar según el modelo que queramos [futuro])
+        transforms.ToTensor(),  # Convertir la imagen a tensor normalizado
     ]
 )
 
 
 def load_model(model_name, model_path, num_classes):
+    """
+    Carga un modelo preentrenado y ajusta su capa de salida para adaptarse al número de clases especificado.
+    Args:
+        model_name (str): Nombre del modelo a cargar. Actualmente soporta "efficientnet_rank_0", "efficientnet_rank_7".
+        model_path (str): Ruta al archivo que contiene los pesos entrenados previamente del modelo.
+        num_classes (int): Número de clases para la tarea de clasificación. Se utiliza para ajustar la capa de salida del modelo.
+    Returns:
+        torch.nn.Module: Modelo cargado y ajustado, listo para evaluación.
+        None: Si ocurre un error al cargar el modelo.
+    Raises:
+        ValueError: Si el nombre del modelo proporcionado no es soportado.
+    Notas:
+        - El modelo base utilizado es EfficientNet-B0 con pesos preentrenados en ImageNet.
+        - La capa de clasificación del modelo se ajusta para que coincida con el número de clases especificado.
+        - Los pesos del modelo se cargan desde la ruta especificada y se asignan al modelo base.
+    """
+
     print(f"Cargando el modelo: {model_name}")  # Agrega este print para depuración
 
     # Cargar el modelo base según el nombre proporcionado
@@ -47,6 +64,17 @@ def load_model(model_name, model_path, num_classes):
 
 # Función para procesar la imagen
 def process_image(image):
+    """
+    Procesa una imagen para convertirla en un tensor adecuado para un modelo de aprendizaje automático.
+    Args:
+        image (PIL.Image.Image): La imagen de entrada que se desea procesar.
+    Returns:
+        torch.Tensor o None: Devuelve un tensor de PyTorch con la imagen procesada y una dimensión de batch añadida.
+        Si ocurre un error durante el procesamiento, devuelve None.
+    Excepciones:
+        Imprime un mensaje de error si ocurre una excepción durante el procesamiento de la imagen.
+    """
+    
     try:
         image = image.convert("RGB")
         image_tensor = transform(image).unsqueeze(0)  # Añadir dimensión de batch
@@ -58,6 +86,21 @@ def process_image(image):
 
 # Función para predecir las clases con el modelo cargado
 def predict(model, image_tensor, class_names):
+    """
+    Realiza una predicción utilizando un modelo de aprendizaje profundo y devuelve las 
+    probabilidades de las tres clases más probables.
+    Args:
+        model (torch.nn.Module): El modelo de aprendizaje profundo previamente cargado.
+        image_tensor (torch.Tensor): El tensor que representa la imagen de entrada, 
+            preparado para ser procesado por el modelo.
+        class_names (list): Lista de nombres de las clases en el mismo orden que las 
+            salidas del modelo.
+    Returns:
+        dict: Un diccionario donde las claves son los nombres de las clases y los valores 
+        son las probabilidades asociadas (en formato string con 4 decimales). Si el modelo 
+        no está cargado correctamente, devuelve un diccionario vacío.
+    """
+
     if model is None:
         print("Error: El modelo no se ha cargado correctamente.")
         return {}
@@ -78,6 +121,17 @@ def predict(model, image_tensor, class_names):
 
 # Función principal para procesar la predicción
 def prediction_process(image_tensor, model_name):
+    """
+    Realiza el proceso de predicción utilizando un modelo de aprendizaje automático.
+    Args:
+        image_tensor (torch.Tensor): Tensor que representa la imagen de entrada para la predicción.
+        model_name (str): Nombre del modelo que se utilizará para realizar la predicción.
+    Returns:
+        dict: Un diccionario con los resultados de la predicción o un mensaje de error si no se pudo cargar el modelo.
+            - Si el modelo se carga correctamente, el diccionario contiene las predicciones realizadas por el modelo.
+            - Si ocurre un error al cargar el modelo, el diccionario contiene la clave "error" con un mensaje descriptivo.
+    """
+
     model_path = os.path.join("models_generator", "models", f"{model_name}.pt")
     num_classes = 15
     class_names = [
