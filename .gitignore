@@ -180,3 +180,6 @@ models_generator/models/
 
 # Notebook crear .gitkeep
 models_generator/keepfile.ipynb
+
+# Metemos en el .gitignore este mismo archivo
+.gitignore
