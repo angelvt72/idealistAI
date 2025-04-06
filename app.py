@@ -5,7 +5,10 @@ import os
 import torchvision.models as models
 import torch.nn as nn
 import streamlit as st
-from prediction_pipeline_modelos import prediction_process, process_image
+from models_generator.training_validation_models.prediction_pipeline_modelos import (
+    prediction_process,
+    process_image,
+)
 
 # Configuración de la página de Streamlit
 st.set_page_config(page_title="Clasificación de Imágenes", layout="centered")
@@ -16,7 +19,13 @@ st.write("Sube una imagen y el modelo te dirá qué es con su probabilidad.")
 
 # Selección del modelo
 model_name = st.selectbox(
-    "Elige el modelo", ["efficientnet_rank_0", "efficientnet_rank_7", "convnext_large_epoch_3", "convnext_large_1_epoch"]
+    "Elige el modelo",
+    [
+        "efficientnet_rank_0",
+        "efficientnet_rank_7",
+        "convnext_large_epoch_3",
+        "convnext_large_1_epoch",
+    ],
 )
 
 # Subir imagen
@@ -36,7 +45,7 @@ if uploaded_file is not None:
 
     # Verificar si la imagen se procesó correctamente
     if image_tensor is not None:
-        
+
         # Obtener predicciones
         results = prediction_process(image_tensor, model_name)
 
