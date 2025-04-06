@@ -175,4 +175,8 @@ cython_debug/
 
 # Imagenes para generar modelo
 models_generator/dataset/**/*.jpg
+# Modelos generados
 models_generator/models/
+
+# Notebook crear .gitkeep
+models_generator/keepfile.ipynb
