@@ -1,0 +1,404 @@
+diff --git a/README.md b/README.md
+index cd8e3ce..7c353f9 100644
+--- a/README.md
++++ b/README.md
+@@ -1,10 +1,30 @@
+-# **IdealistAI**
++# **Understanding CNNs**
+ 
+-### **Tabla de contenidos**
++### **Índice**
+ 
+-- [**1. Requisitos**](#1-requisitos) <br>
++- [**1. Introducción**](#1-introduccion)
++- [**2. Requisitos**](#2-requisitos)
++- [**3. Desarrollo**](#3-desarrollo-del-proyecto)
++  - [**3.1 Entrenamiento de modelos**](#31-entrenamiento-de-modelos)
++    - [**3.1.1 Estudio del efecto del _learning rate_**](#311-estudio-del-efecto-del-learning-rate)
++    - [**3.1.2 Comparación entre modelos**](#312-comparacion-entre-modelos)
++    - [**3.1.3 Obtención de métricas por clase**](#313-obtencion-de-metricas-por-clase)
++  - [**3.2 Despliegue de una app en `Streamlit`**](#32-despliegue-de-una-app-en-streamlit)
++    - [**3.2.1 Ejecución**](#321-ejecucion)
++    - [**3.2.2 Resultados**](#322-resultados)
++- [**4. Conclusiones**](#4-conclusiones)
+ 
+-## **1. Requisitos**
++## **1. Introducción**
++
++Este proyecto tiene como objetivo el estudio e implementación de modelos basados en redes neuronales convolucionales (CNNs), mediante la realización de diversas comparativas en las que se analizan distintos modelos y parámetros, así como su impacto en la calidad de las predicciones.
++
++Para ello, se ha empleado el dataset utilizado en el artículo:
++
++> **Lazebnik, S., Schmid, C. y Ponce, J. (2006).** _Beyond Bags of Features: Spatial Pyramid Matching for Recognizing Natural Scene Categories_. En: Proc. IEEE Conf. Computer Vision and Pattern Recognition, Vol. 2, pp. 2169–2178, 17–22 de junio de 2006.
++
++Este dataset consta de diversas imágenes en blanco y negro de escenas naturales y urbanas, con hasta 15 clases distintas, y está disponible en la página oficial de `Figshare`: [15-Scene Image Dataset](https://figshare.com/articles/dataset/15-Scene_Image_Dataset/7007177).
++
++## **2. Requisitos**
+ 
+ Para poder ejecutar el proyecto, es necesario tener instalado Python 3.12.9 o superior y las siguientes librerías:
+ 
+@@ -14,14 +34,12 @@ pip install -r requirements.txt
+ 
+ Con esto, ya tenremos todas las dependencias necesarias para ejecutar el proyecto.
+ 
+-## **2. Estructura del proyecto**
++## **3. Desarrollo**
+ 
+ Este proyecto está dividido en varias partes:
+ 
+ ### **2.1 Entrenamiento modelos**
+ 
+-
+-
+ - Comparar modelos según métricas e hiperparámetros usando weight and bias
+ 
+ - Validación de cada modelo
+diff --git a/config/wandb/launch-config.yaml b/config/wandb/launch-config.yaml
+deleted file mode 100644
+index f09ba8d..0000000
+--- a/config/wandb/launch-config.yaml
++++ /dev/null
+@@ -1 +0,0 @@
+-builder: docker
+diff --git a/models_generator/dataset/.gitkeep b/models_generator/dataset/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/.gitkeep b/models_generator/dataset/training/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Bedroom/.gitkeep b/models_generator/dataset/training/Bedroom/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Coast/.gitkeep b/models_generator/dataset/training/Coast/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Forest/.gitkeep b/models_generator/dataset/training/Forest/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Highway/.gitkeep b/models_generator/dataset/training/Highway/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Industrial/.gitkeep b/models_generator/dataset/training/Industrial/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Inside city/.gitkeep b/models_generator/dataset/training/Inside city/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Kitchen/.gitkeep b/models_generator/dataset/training/Kitchen/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Living room/.gitkeep b/models_generator/dataset/training/Living room/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Mountain/.gitkeep b/models_generator/dataset/training/Mountain/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Office/.gitkeep b/models_generator/dataset/training/Office/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Open country/.gitkeep b/models_generator/dataset/training/Open country/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Store/.gitkeep b/models_generator/dataset/training/Store/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Street/.gitkeep b/models_generator/dataset/training/Street/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Suburb/.gitkeep b/models_generator/dataset/training/Suburb/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/training/Tall building/.gitkeep b/models_generator/dataset/training/Tall building/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/.gitkeep b/models_generator/dataset/validation/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Bedroom/.gitkeep b/models_generator/dataset/validation/Bedroom/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Coast/.gitkeep b/models_generator/dataset/validation/Coast/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Forest/.gitkeep b/models_generator/dataset/validation/Forest/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Highway/.gitkeep b/models_generator/dataset/validation/Highway/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Industrial/.gitkeep b/models_generator/dataset/validation/Industrial/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Inside city/.gitkeep b/models_generator/dataset/validation/Inside city/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Kitchen/.gitkeep b/models_generator/dataset/validation/Kitchen/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Living room/.gitkeep b/models_generator/dataset/validation/Living room/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Mountain/.gitkeep b/models_generator/dataset/validation/Mountain/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Office/.gitkeep b/models_generator/dataset/validation/Office/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Open country/.gitkeep b/models_generator/dataset/validation/Open country/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Store/.gitkeep b/models_generator/dataset/validation/Store/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Street/.gitkeep b/models_generator/dataset/validation/Street/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Suburb/.gitkeep b/models_generator/dataset/validation/Suburb/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/dataset/validation/Tall building/.gitkeep b/models_generator/dataset/validation/Tall building/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/models_generator/train_models.py b/models_generator/train_models.py
+index e2a7e1a..a2f7ee1 100644
+--- a/models_generator/train_models.py
++++ b/models_generator/train_models.py
+@@ -7,10 +7,10 @@ import logging
+ import sys
+ import wandb
+ 
+-# Inicia sesión en wandb
++# Log in to wandb
+ wandb.login()
+ 
+-# Configuración de logging detallada
++# Detailed logging configuration
+ logging.basicConfig(
+     level=logging.INFO, 
+     format='%(asctime)s - %(levelname)s - %(message)s',
+@@ -20,35 +20,38 @@ logging.basicConfig(
+     ]
+ )
+ 
++# Function to set up the device for training
+ def get_device():
+     """
+-    Determina el dispositivo óptimo:
+-      - GPU NVIDIA si está disponible (CUDA)
+-      - GPU Apple Silicon si está disponible (MPS)
+-      - CPU en otro caso
++    Determines the optimal device:
++      - NVIDIA GPU if available (CUDA)
++      - Apple Silicon GPU if available (MPS)
++      - CPU otherwise
+     """
+     if torch.cuda.is_available():
+         device = torch.device("cuda")
+-        logging.info("Usando GPU NVIDIA (CUDA)")
++        logging.info("Using NVIDIA GPU (CUDA)")
+     elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+         device = torch.device("mps")
+-        logging.info("Usando GPU Apple Silicon (MPS)")
++        logging.info("Using Apple Silicon GPU (MPS)")
+     else:
+         device = torch.device("cpu")
+-        logging.info("Usando CPU")
++        logging.info("Using CPU")
+     return device
+ 
++# Function to determine the number of workers for DataLoader
+ def get_num_workers(default_max=8):
+     """
+-    Devuelve el número óptimo de workers, limitado al menor entre el número de núcleos disponibles y default_max.
++    Returns the optimal number of workers, limited by the minimum of available CPU cores and default_max.
+     """
+     cpu_count = os.cpu_count() or default_max
+     num_workers = min(cpu_count, default_max)
+-    logging.info(f"Número de workers configurados: {num_workers}")
++    logging.info(f"Configured number of workers: {num_workers}")
+     return num_workers
+ 
++# Function to load training and validation data
+ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
+-    # Transformaciones de datos
++    # Data transformations
+     transform = torchvision.transforms.Compose([
+         torchvision.transforms.Resize((img_size, img_size)),
+         torchvision.transforms.ToTensor(),
+@@ -59,22 +62,22 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
+     ])
+     
+     if not os.path.exists(train_dir):
+-        raise ValueError(f"El directorio de entrenamiento no existe: {train_dir}")
++        raise ValueError(f"Training directory does not exist: {train_dir}")
+     if not os.path.exists(valid_dir):
+-        raise ValueError(f"El directorio de validación no existe: {valid_dir}")
++        raise ValueError(f"Validation directory does not exist: {valid_dir}")
+     
+     train_dataset = torchvision.datasets.ImageFolder(train_dir, transform=transform)
+     valid_dataset = torchvision.datasets.ImageFolder(valid_dir, transform=transform)
+     
+     num_workers = get_num_workers()
+-    pin_mem = True if torch.cuda.is_available() else False
++    pin_memory = True if torch.cuda.is_available() else False
+     
+     train_loader = DataLoader(
+         train_dataset, 
+         batch_size=batch_size,
+         shuffle=True,
+         num_workers=num_workers,
+-        pin_memory=pin_mem
++        pin_memory=pin_memory
+     )
+     
+     valid_loader = DataLoader(
+@@ -82,11 +85,12 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
+         batch_size=batch_size,
+         shuffle=False,
+         num_workers=num_workers,
+-        pin_memory=pin_mem
++        pin_memory=pin_memory
+     )
+     
+     return train_loader, valid_loader, len(train_dataset.classes)
+ 
++# Function to evaluate the model on the validation set
+ def evaluate(model, valid_loader, criterion, device):
+     model.eval()
+     running_loss = 0.0
+@@ -105,40 +109,41 @@ def evaluate(model, valid_loader, criterion, device):
+     accuracy = 100 * correct_predictions / total_predictions
+     return avg_loss, accuracy
+ 
+-# Función auxiliar para construir y configurar el modelo según la elección del usuario.
++# Helper function to build and configure the model based on the user's choice.
+ def build_model(model_name, num_classes):
+     model_name = model_name.lower().strip()
+     if model_name == "convnext_large":
+-        # Cargar ConvNeXt Large preentrenado
++        # Load pre-trained ConvNeXt Large
+         model = torchvision.models.convnext_large(weights=torchvision.models.ConvNeXt_Large_Weights.DEFAULT)
+-        # Reemplazar la capa final (en posición [2] de la secuencia) para ajustar el número de clases
++        # Replace the final layer (at position [2] of the classifier sequence) to match the number of classes
+         model.classifier[2] = nn.Linear(model.classifier[2].in_features, num_classes)
+-        logging.info("Modelo ConvNeXt Large seleccionado")
++        logging.info("ConvNeXt Large model selected")
+     elif model_name == "efficientnet_b0":
+-        # Cargar EfficientNet-B0 preentrenado
++        # Load pre-trained EfficientNet-B0
+         model = torchvision.models.efficientnet_b0(weights=torchvision.models.EfficientNet_B0_Weights.DEFAULT)
+-        # Reemplazar la última capa (índice [1]) de la secuencia classifier
++        # Replace the last layer (index [1]) of the classifier sequence
+         model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
+-        logging.info("Modelo EfficientNet-B0 seleccionado")
++        logging.info("EfficientNet-B0 model selected")
+     else:
+-        raise ValueError("Modelo no soportado. Opciones disponibles: convnext_large, efficientnet_b0.")
++        raise ValueError("Unsupported model. Available options: convnext_large, efficientnet_b0.")
+     return model
+ 
+-def train(rank, world_size, model_choice, learning_rate, epochs):
++# Function to train the model
++def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
+     try:
+-        logging.info(f"Comenzando entrenamiento en rank {rank}")
++        logging.info(f"Starting training on rank {rank}")
+         
+         train_dir = "./models_generator/dataset/training"
+         valid_dir = "./models_generator/dataset/validation"
+         
+-        # Cargar datos
++        # Load data with user-specified batch size
+         train_loader, valid_loader, num_classes = load_data(
+             train_dir, valid_dir, 
+-            batch_size=8,  
++            batch_size=batch_size,  
+             img_size=224
+         )
+         
+-        # Configurar W&B
++        # Setup W&B
+         wandb.init(
+             project="IdealistAI",
+             config={
+@@ -149,17 +154,17 @@ def train(rank, world_size, model_choice, learning_rate, epochs):
+             name=f"{model_choice}_{epochs}_epochs_{learning_rate}_lr"
+         )
+         
+-        logging.info(f"Número de clases: {num_classes}")
+-        logging.info(f"Longitud del conjunto de entrenamiento: {len(train_loader.dataset)}")
++        logging.info(f"Number of classes: {num_classes}")
++        logging.info(f"Training set size: {len(train_loader.dataset)}")
+         
+         device = get_device()
+         
+-        # Construir el modelo dinámicamente según la elección del usuario
++        # Dynamically build model based on the user's choice
+         model = build_model(model_choice, num_classes)
+         
+-        # Si hay más de una GPU NVIDIA, usar DataParallel
++        # If there is more than one NVIDIA GPU, use DataParallel
+         if torch.cuda.device_count() > 1 and device.type == "cuda":
+-            logging.info(f"Usando {torch.cuda.device_count()} GPUs con DataParallel")
++            logging.info(f"Using {torch.cuda.device_count()} GPUs with DataParallel")
+             model = nn.DataParallel(model)
+         
+         model = model.to(device)
+@@ -168,7 +173,7 @@ def train(rank, world_size, model_choice, learning_rate, epochs):
+         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+         criterion = nn.CrossEntropyLoss()
+         
+-        logging.info("Comenzando bucle de entrenamiento")
++        logging.info("Starting training loop")
+         for epoch in range(epochs):
+             model.train()
+             running_loss = 0.0
+@@ -189,10 +194,10 @@ def train(rank, world_size, model_choice, learning_rate, epochs):
+                 
+                 if batch_idx % 10 == 0:
+                     accuracy = 100 * correct_predictions / total_predictions
+-                    logging.info(f"Época {epoch+1}, Batch {batch_idx}, Loss: {loss.item():.4f}, Train Accuracy: {accuracy:.2f}%")
++                    logging.info(f"Epoch {epoch+1}, Batch {batch_idx}, Loss: {loss.item():.4f}, Train Accuracy: {accuracy:.2f}%")
+ 
+             val_loss, val_accuracy = evaluate(model, valid_loader, criterion, device)
+-            logging.info(f"Época {epoch+1}, Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%")
++            logging.info(f"Epoch {epoch+1}, Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%")
+             
+             wandb.log({
+                 "epoch": epoch,
+@@ -212,21 +217,24 @@ def train(rank, world_size, model_choice, learning_rate, epochs):
+         
+         model_path = f"./models_generator/models/{model_choice}_{epochs}epochs_{learning_rate}_lr.pt"
+         torch.save(model.state_dict(), model_path)
+-        logging.info(f"Modelo guardado exitosamente en {model_path}")
++        logging.info(f"Model saved successfully at {model_path}")
+         wandb.finish()
+         
+     except Exception as e:
+-        logging.error(f"Error durante el entrenamiento: {e}", exc_info=True)
++        logging.error(f"Error during training: {e}", exc_info=True)
+ 
++# Main function to prompt user for input and start training
+ def main():
+-    # Solicitar al usuario el modelo CNN a entrenar por la terminal
+-    model_choice = input("Ingrese el nombre del modelo CNN a entrenar (ej: convnext_large o efficientnet_b0): ").strip()
++    # Prompt the user to enter the CNN model to train via the terminal
++    model_choice = input("Enter the CNN model name to train (e.g.: convnext_large or efficientnet_b0): ").strip()
++    
++    # Ask the user for learning rate, number of epochs and batch size
++    learning_rate = float(input("Enter the learning rate (e.g.: 0.0005): ").strip())
++    epochs = int(input("Enter the number of epochs (e.g.: 5): ").strip())
++    batch_size = int(input("Enter the batch size (e.g.: 8): ").strip())
+ 
+-    # Elegir lerning rate y epochs
+-    epochs = 5
+-    learning_rate = 5 * 1e-4
+-    world_size = 1  # En este ejemplo se usa un solo dispositivo
+-    train(rank=0, world_size=world_size, model_choice=model_choice, learning_rate=learning_rate, epochs=epochs)
++    world_size = 1  # In this example a single device is used
++    train(rank=0, world_size=world_size, model_choice=model_choice, learning_rate=learning_rate, epochs=epochs, batch_size=batch_size)
+ 
+ if __name__ == '__main__':
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,15 @@
+{"time":"2025-04-14T21:01:38.434037+02:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/Users/Charly_1/Desktop/MASTER/2º Cuatri y anuales/ML II/5 - Deep Learning/idealistAI/wandb/run-20250414_210138-emc7bted/logs/debug-core.log"}
+{"time":"2025-04-14T21:01:38.543325+02:00","level":"INFO","msg":"created new stream","id":"emc7bted"}
+{"time":"2025-04-14T21:01:38.543374+02:00","level":"INFO","msg":"stream: started","id":"emc7bted"}
+{"time":"2025-04-14T21:01:38.54344+02:00","level":"INFO","msg":"handler: started","stream_id":"emc7bted"}
+{"time":"2025-04-14T21:01:38.543635+02:00","level":"INFO","msg":"writer: Do: started","stream_id":"emc7bted"}
+{"time":"2025-04-14T21:01:38.54382+02:00","level":"INFO","msg":"sender: started","stream_id":"emc7bted"}
+{"time":"2025-04-14T21:01:38.897882+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-14T21:01:44.257563+02:00","level":"INFO","msg":"stream: closing","id":"emc7bted"}
+{"time":"2025-04-14T21:01:44.257876+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-14T21:01:44.259397+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-14T21:01:44.878806+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-14T21:01:45.195196+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":"emc7bted"}
+{"time":"2025-04-14T21:01:45.195203+02:00","level":"INFO","msg":"handler: closed","stream_id":"emc7bted"}
+{"time":"2025-04-14T21:01:45.195201+02:00","level":"INFO","msg":"sender: closed","stream_id":"emc7bted"}
+{"time":"2025-04-14T21:01:45.195696+02:00","level":"INFO","msg":"stream: closed","id":"emc7bted"}
