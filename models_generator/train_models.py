@@ -1,11 +1,3 @@
-"""
-Este script entrena un modelo de clasificación basado en ConvNeXt Large preentrenado de torchvision.
-Utiliza WandB para el tracking del entrenamiento, optimiza el uso de recursos del sistema (CPU/GPU/MPS) 
-y configura automáticamente el número de workers según la cantidad de núcleos disponibles (máximo 40).
-
-Modelo utilizado: ConvNeXt Large preentrenado.
-"""
-
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -23,7 +15,7 @@ logging.basicConfig(
     level=logging.INFO, 
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.StreamHandler(sys.stdout),  # Salida a consola
+        logging.StreamHandler(sys.stdout),
         logging.FileHandler("training_log.txt")
     ]
 )
@@ -31,9 +23,9 @@ logging.basicConfig(
 def get_device():
     """
     Determina el dispositivo óptimo:
-    - GPU NVIDIA si está disponible (CUDA)
-    - GPU Apple Silicon si está disponible (MPS)
-    - CPU en otro caso
+      - GPU NVIDIA si está disponible (CUDA)
+      - GPU Apple Silicon si está disponible (MPS)
+      - CPU en otro caso
     """
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -48,7 +40,7 @@ def get_device():
 
 def get_num_workers(default_max=8):
     """
-    Devuelve el número óptimo de workers, limitado al menor entre el número de núcleos de CPU disponibles y default_max.
+    Devuelve el número óptimo de workers, limitado al menor entre el número de núcleos disponibles y default_max.
     """
     cpu_count = os.cpu_count() or default_max
     num_workers = min(cpu_count, default_max)
@@ -66,25 +58,17 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
         )
     ])
     
-    # Verificar existencia de directorios
     if not os.path.exists(train_dir):
         raise ValueError(f"El directorio de entrenamiento no existe: {train_dir}")
     if not os.path.exists(valid_dir):
         raise ValueError(f"El directorio de validación no existe: {valid_dir}")
     
-    # Cargar conjuntos de datos
     train_dataset = torchvision.datasets.ImageFolder(train_dir, transform=transform)
     valid_dataset = torchvision.datasets.ImageFolder(valid_dir, transform=transform)
     
-    # Configurar el número de workers
     num_workers = get_num_workers()
-    #num_workers =  4
-    batch_size = 8
-
-    # Determinar si usar pin_memory (útil en GPU)
     pin_mem = True if torch.cuda.is_available() else False
     
-    # Crear dataloaders
     train_loader = DataLoader(
         train_dataset, 
         batch_size=batch_size,
@@ -108,82 +92,83 @@ def evaluate(model, valid_loader, criterion, device):
     running_loss = 0.0
     correct_predictions = 0
     total_predictions = 0
-    
     with torch.no_grad():
         for inputs, labels in valid_loader:
-            # Mover datos al dispositivo óptimo
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             running_loss += loss.item()
-
-            # Calcular accuracy
             _, predicted = torch.max(outputs, 1)
             correct_predictions += (predicted == labels).sum().item()
             total_predictions += labels.size(0)
-    
     avg_loss = running_loss / len(valid_loader)
     accuracy = 100 * correct_predictions / total_predictions
     return avg_loss, accuracy
 
-def train(rank, world_size):
+# Función auxiliar para construir y configurar el modelo según la elección del usuario.
+def build_model(model_name, num_classes):
+    model_name = model_name.lower().strip()
+    if model_name == "convnext_large":
+        # Cargar ConvNeXt Large preentrenado
+        model = torchvision.models.convnext_large(weights=torchvision.models.ConvNeXt_Large_Weights.DEFAULT)
+        # Reemplazar la capa final (en posición [2] de la secuencia) para ajustar el número de clases
+        model.classifier[2] = nn.Linear(model.classifier[2].in_features, num_classes)
+        logging.info("Modelo ConvNeXt Large seleccionado")
+    elif model_name == "efficientnet_b0":
+        # Cargar EfficientNet-B0 preentrenado
+        model = torchvision.models.efficientnet_b0(weights=torchvision.models.EfficientNet_B0_Weights.DEFAULT)
+        # Reemplazar la última capa (índice [1]) de la secuencia classifier
+        model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
+        logging.info("Modelo EfficientNet-B0 seleccionado")
+    else:
+        raise ValueError("Modelo no soportado. Opciones disponibles: convnext_large, efficientnet_b0.")
+    return model
+
+def train(rank, world_size, model_choice, learning_rate, epochs):
     try:
         logging.info(f"Comenzando entrenamiento en rank {rank}")
-
-        # Configuración de hiperparámetros
-        learning_rate = 1e-4 * world_size
-        epochs = 5
         
-        # Configuración de los directorios de datos
-        train_dir = "./dataset/training"
-        valid_dir = "./dataset/validation"
+        train_dir = "./models_generator/dataset/training"
+        valid_dir = "./models_generator/dataset/validation"
         
         # Cargar datos
         train_loader, valid_loader, num_classes = load_data(
             train_dir, valid_dir, 
-            batch_size=8,  # Ajusta el tamaño del batch según la RAM disponible
+            batch_size=8,  
             img_size=224
         )
-
-        # Configurar W&B con valores numéricos en lugar de strings
+        
+        # Configurar W&B
         wandb.init(
             project="IdealistAI",
             config={
-                "model": f"convnext_large_{epochs}_epochs_{learning_rate}_lr",
+                "model": f"{model_choice}_{epochs}_epochs_{learning_rate}_lr",
                 "epochs": epochs,
                 "batch_size": train_loader.batch_size
             },
-            name=f"convnext_large_{epochs}_epochs_{learning_rate}_lr"
+            name=f"{model_choice}_{epochs}_epochs_{learning_rate}_lr"
         )
         
         logging.info(f"Número de clases: {num_classes}")
         logging.info(f"Longitud del conjunto de entrenamiento: {len(train_loader.dataset)}")
         
-        # Determinar el dispositivo óptimo
         device = get_device()
         
-        # Preparar el modelo: carga convnext_large preentrenado
-        model = torchvision.models.convnext_large(weights=torchvision.models.ConvNeXt_Large_Weights.DEFAULT)
-        
-        # Reemplazar la capa final para que coincida con el número de clases del dataset
-        model.classifier[2] = nn.Linear(model.classifier[2].in_features, num_classes)
+        # Construir el modelo dinámicamente según la elección del usuario
+        model = build_model(model_choice, num_classes)
         
         # Si hay más de una GPU NVIDIA, usar DataParallel
         if torch.cuda.device_count() > 1 and device.type == "cuda":
             logging.info(f"Usando {torch.cuda.device_count()} GPUs con DataParallel")
             model = nn.DataParallel(model)
         
-        # Mover el modelo al dispositivo óptimo
         model = model.to(device)
         
-        # Definir optimizador, criterio y scheduler
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
         criterion = nn.CrossEntropyLoss()
         
         logging.info("Comenzando bucle de entrenamiento")
-        
-        # Bucle de entrenamiento
         for epoch in range(epochs):
             model.train()
             running_loss = 0.0
@@ -191,30 +176,24 @@ def train(rank, world_size):
             total_predictions = 0
 
             for batch_idx, (inputs, labels) in enumerate(train_loader):
-                # Mover datos al dispositivo óptimo
                 inputs, labels = inputs.to(device), labels.to(device)
-                
                 optimizer.zero_grad()
                 outputs = model(inputs)
                 loss = criterion(outputs, labels)
                 loss.backward()
                 optimizer.step()
 
-                # Calcular accuracy para el batch
                 _, predicted = torch.max(outputs, 1)
                 correct_predictions += (predicted == labels).sum().item()
                 total_predictions += labels.size(0)
                 
-                # Imprimir cada 10 batches
                 if batch_idx % 10 == 0:
                     accuracy = 100 * correct_predictions / total_predictions
                     logging.info(f"Época {epoch+1}, Batch {batch_idx}, Loss: {loss.item():.4f}, Train Accuracy: {accuracy:.2f}%")
 
-            # Evaluar en el conjunto de validación
             val_loss, val_accuracy = evaluate(model, valid_loader, criterion, device)
             logging.info(f"Época {epoch+1}, Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%")
             
-            # Log metrics en wandb utilizando valores numéricos
             wandb.log({
                 "epoch": epoch,
                 "train_loss": loss.item(),
@@ -224,12 +203,14 @@ def train(rank, world_size):
                 "lr": optimizer.param_groups[0]['lr']
             })
             
-            # Actualizar el scheduler
             scheduler.step()
         
-        # Guardar el modelo final
-        os.makedirs('./models', exist_ok=True)
-        model_path = f"./models/convnext_large_{epochs}epochs{learning_rate}_lr.pt"
+        try:
+            os.makedirs('./models_generator/models', exist_ok=True)
+        except Exception as e:
+            pass
+        
+        model_path = f"./models_generator/models/{model_choice}_{epochs}epochs_{learning_rate}_lr.pt"
         torch.save(model.state_dict(), model_path)
         logging.info(f"Modelo guardado exitosamente en {model_path}")
         wandb.finish()
@@ -238,13 +219,14 @@ def train(rank, world_size):
         logging.error(f"Error durante el entrenamiento: {e}", exc_info=True)
 
 def main():
-    # Usamos un solo dispositivo para entrenamiento (no se está usando entrenamiento distribuido)
-    world_size = 1
+    # Solicitar al usuario el modelo CNN a entrenar por la terminal
+    model_choice = input("Ingrese el nombre del modelo CNN a entrenar (ej: convnext_large o efficientnet_b0): ").strip()
 
-    # En este ejemplo se ignora el parámetro rank para cargar el modelo convnext_large
-    train(rank=0, world_size=world_size)
+    # Elegir lerning rate y epochs
+    epochs = 5
+    learning_rate = 5 * 1e-4
+    world_size = 1  # En este ejemplo se usa un solo dispositivo
+    train(rank=0, world_size=world_size, model_choice=model_choice, learning_rate=learning_rate, epochs=epochs)
 
-# EJECUCIÓN PRINCIPAL
 if __name__ == '__main__':
     main()
-
