@@ -1,4 +1,5 @@
 # **Understanding CNNs**
+** Ángel Visedo, Pablo Rodríguez y José Carlos Riego**
 
 ### **Índice**
 
