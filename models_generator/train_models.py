@@ -113,14 +113,19 @@ def evaluate(model, valid_loader, criterion, device):
 def build_model(model_name, num_classes):
     model_name = model_name.lower().strip()
     if model_name == "convnext_large":
+
         # Load pre-trained ConvNeXt Large
         model = torchvision.models.convnext_large(weights=torchvision.models.ConvNeXt_Large_Weights.DEFAULT)
+
         # Replace the final layer (at position [2] of the classifier sequence) to match the number of classes
         model.classifier[2] = nn.Linear(model.classifier[2].in_features, num_classes)
         logging.info("ConvNeXt Large model selected")
+        
     elif model_name == "efficientnet_b0":
+
         # Load pre-trained EfficientNet-B0
         model = torchvision.models.efficientnet_b0(weights=torchvision.models.EfficientNet_B0_Weights.DEFAULT)
+
         # Replace the last layer (index [1]) of the classifier sequence
         model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
         logging.info("EfficientNet-B0 model selected")
