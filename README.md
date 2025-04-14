@@ -72,7 +72,40 @@ A parir de estos resultados, podemos concluir lo siguiente:
 
 #### **3.1.2 Comparación entre modelos**
 
-En este apartado, se ha fijado el learning rate a 0.0005, y se han entrenado los siguientes modelos:
+En este apartado, se ha establecido el learning rate a 0.0005 y el learning rate scheduler, y se han entrenado los siguientes modelos:
 
 - `convnext-large`
 - `efficientnet-b0`
+
+| Model                   | efficientnet-b0 | convnext-large |
+| ----------------------- | --------------- | -------------- |
+| Validation Accuracy (%) | 89.5            | 92.9           |
+| Training Accuracy (%)   | 93.6            | 98.4           |
+
+[GRÁFICA DE ACCURACY EN VALIDACION Y TRAINING]
+
+Como se puede observar, `ConvNeXt-Large` supera a `EfficientNet-B0` de manera sólida en este problema. La razón de esto podría ser que, a pesar de la alta eficiencia de EfficientNet-B0 (alrededor de 5.3M de parámetros), ConvNeXt-Large, con aproximadamente 198M de parámetros, ofrece una mayor capacidad para aprender representaciones complejas y detalladas, lo que se traduce en un desempeño superior en precisión y generalización.
+
+#### **3.1.3 Obtención de métricas por clase**
+
+...
+
+### **3.2 Despliegue de una app en `Streamlit`**
+
+Para el despliegue de la aplicación, se ha utilizado `Streamlit`, una herramienta que permite crear aplicaciones web de manera sencilla y rápida, ideal para la visualización de modelos de machine learning.
+
+#### **3.2.1 Ejecución**
+
+Para ejecutar la aplicación, es necesario ejecutar el siguiente comando en la terminal:
+
+```bash
+streamlit run app.py
+```
+
+Esto abrirá una nueva ventana en el navegador, donde se podrá interactuar con la aplicación.
+
+#### **3.2.2 Resultados**
+
+### **4. Conclusiones**
+
+En este proyecto, hemos podido observar el impacto de diferentes parámetros en el rendimiento de los modelos de CNNs, así como la importancia de la elección del modelo y del learning rate. Además, hemos aprendido a utilizar `Streamlit` para desplegar una aplicación web que permite interactuar con los modelos entrenados y visualizar sus resultados.
