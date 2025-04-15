@@ -1,7 +1,0 @@
-2025-04-14 21:01:38,379 - INFO - Starting training on rank 0
-2025-04-14 21:01:38,399 - INFO - Configured number of workers: 8
-2025-04-14 21:01:38,999 - INFO - Number of classes: 15
-2025-04-14 21:01:38,999 - INFO - Training set size: 2985
-2025-04-14 21:01:39,008 - INFO - Using Apple Silicon GPU (MPS)
-2025-04-14 21:01:42,187 - INFO - ConvNeXt Large model selected
-2025-04-14 21:01:42,452 - INFO - Starting training loop
