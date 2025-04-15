@@ -69,7 +69,15 @@ A continuación, se muestran los resultados obtenidos:
 | Validation Accuracy (%) | 41.0   | 86.3  | 92.9   |
 | Training Accuracy (%)   | 49.1   | 95.8  | 98.4   |
 
-[GRÁFICA DE ACCURACY EN VALIDACION Y TRAINING]
+<figure>
+  <img src="images/train_accuracy_convnext-large.png" alt="Train Accuracy for the comparaison of section 3.1.1" width="600">
+  <figcaption>Figure 1: Evolution in train accuracy of convnext-large model with different learning rate. </figcaption>
+</figure>
+
+<figure>
+  <img src="images/validation_accuracy_convnext-large.png" alt="Validation Accuracy for the comparaison of section 3.1.1" width="600">
+  <figcaption>Figure 2: Evolution in validation accuracy of convnext-large model with different learning rate. </figcaption>
+</figure>
 
 A parir de estos resultados, podemos concluir lo siguiente:
 
@@ -90,7 +98,15 @@ En este apartado, se ha establecido el learning rate a 0.0005 y el learning rate
 | Validation Accuracy (%) | 89.5            | 92.9           |
 | Training Accuracy (%)   | 93.6            | 98.4           |
 
-[GRÁFICA DE ACCURACY EN VALIDACION Y TRAINING]
+<figure>
+  <img src="images/train_accuracy_same_lr.png" alt="Train Accuracy for the comparaison of section 3.1.2" width="600">
+  <figcaption>Figure 3: Evolution in train accuracy of different CNN models with same learning rate. </figcaption>
+</figure>
+
+<figure>
+  <img src="images/validation_accuracy_same_lr.png" alt="Validation Accuracy for the comparaison of section 3.1.2" width="600">
+  <figcaption>Figure 4: Evolution in validation accuracy of different CNN models with same learning rate. </figcaption>
+</figure>
 
 Como se puede observar, `ConvNeXt-Large` supera a `EfficientNet-B0` de manera sólida en este problema. La razón de esto podría ser que, a pesar de la alta eficiencia de EfficientNet-B0 (alrededor de 5.3M de parámetros), ConvNeXt-Large, con aproximadamente 198M de parámetros, ofrece una mayor capacidad para aprender representaciones complejas y detalladas, lo que se traduce en un desempeño superior en precisión y generalización.
 
@@ -117,10 +133,24 @@ streamlit run app.py
 
 Esto abrirá una nueva ventana en el navegador, donde se podrá interactuar con la aplicación.
 
+Así, para predecir la clase de una imagen, basta con elegir el modelo deseado y cargar la imagen. Después, se mostrará las 3 clases con mayor probabilidad de ser la correcta, junto con su probabilidad asociada.
+
 #### **3.2.2 Resultados**
 
-A modo de ejemplo,
+A modo de ejemplo, se muestra en la siguiente figura el resultado de la predicción de una imagen de una costa, donde se observa que el modelo ha predicho correctamente la clase de la imagen:
+
+INSERTAR IMAGEN
 
 ### **4. Conclusiones**
 
-En este proyecto, hemos podido observar el impacto de diferentes parámetros en el rendimiento de los modelos de CNNs, así como la importancia de la elección del modelo y del learning rate. Además, hemos aprendido a utilizar `Streamlit` para desplegar una aplicación web que permite interactuar con los modelos entrenados y visualizar sus resultados.
+En este proyecto, se han podido obtener las siguientes conclusiones:
+
+1. El learning rate es un parámetro clave en el entrenamiento de modelos de machine learning, y su elección puede afectar significativamente la convergencia y el rendimiento del modelo, siendo preciso encontrar un valor que evite la divergencia de la optimización, sin ser excesivamente pequeño para no entorpecer el proceso de aprendizaje.
+
+2. El uso de `learning rate scheduler` ha permitido mejorar la convergencia del modelo, al ajustar el learning rate durante el entrenamiento.
+
+3. El modelo `ConvNeXt-Large` ha demostrado ser superior al `EfficientNet-B0` en este problema, lo que destaca la mejora que supone aumentar el número de parámetros del modelo, a costa de un mayor tiempo de entrenamiento y uso de recursos.
+
+4. El overfitting ha sido el mayor desafío localizado en este proyecto, y, en futuras implementaciones, se deberían ajustar parámetros como el número de épocas, o emplear técnicas como el dropout o la regularización L2, para evitarlo.
+
+5. Con el fin de lograr una precisión adecuada en todas las clases, lo ideal sería implantar un modelo de ensamblado, que combine los resultados de varios modelos, para mejorar la precisión y la robustez del sistema.
