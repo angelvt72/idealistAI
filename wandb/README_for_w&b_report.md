@@ -1,7 +1,3 @@
-# **Understanding CNNs**
-
-**Ángel Visedo, Pablo Rodríguez and José Carlos Riego**
-
 ### **Table of Contents**
 
 - [**1. Introduction**](#1-introduction)
@@ -69,16 +65,6 @@ The results obtained are shown below:
 | Validation Accuracy (%) | 41.0   | 86.3  | 92.9   |
 | Training Accuracy (%)   | 49.1   | 95.8  | 98.4   |
 
-<figure>
-  <img src="images/train_accuracy_convnext-large.png" alt="Train Accuracy for the comparison of section 3.1.1" width="600">
-  <figcaption>Figure 1: Evolution in train accuracy of ConvNeXt-Large model with different learning rates.</figcaption>
-</figure>
-
-<figure>
-  <img src="images/validation_accuracy_convnext-large.png" alt="Validation Accuracy for the comparison of section 3.1.1" width="600">
-  <figcaption>Figure 2: Evolution in validation accuracy of ConvNeXt-Large model with different learning rates.</figcaption>
-</figure>
-
 From these results, we can conclude the following:
 
 - The optimal learning rate among those tested for this model is 0.0005, as it achieved the best validation accuracy.
@@ -97,16 +83,6 @@ In this section, the learning rate was set to 0.0005 with a learning rate schedu
 | ----------------------- | --------------- | -------------- |
 | Validation Accuracy (%) | 89.5            | 92.9           |
 | Training Accuracy (%)   | 93.6            | 98.4           |
-
-<figure>
-  <img src="images/train_accuracy_same_lr.png" alt="Train Accuracy for the comparison of section 3.1.2" width="600">
-  <figcaption>Figure 3: Evolution in train accuracy of different CNN models with the same learning rate.</figcaption>
-</figure>
-
-<figure>
-  <img src="images/validation_accuracy_same_lr.png" alt="Validation Accuracy for the comparison of section 3.1.2" width="600">
-  <figcaption>Figure 4: Evolution in validation accuracy of different CNN models with the same learning rate.</figcaption>
-</figure>
 
 As can be observed, ConvNeXt-Large consistently outperforms EfficientNet-B0 in this problem. The reason for this could be that, despite the high efficiency of EfficientNet-B0 (around 5.3M parameters), ConvNeXt-Large, with approximately 198M parameters, offers a greater capacity to learn complex and detailed representations, which translates into superior performance in accuracy and generalization.
 
@@ -138,13 +114,6 @@ To predict the class of an image, simply choose the desired model and upload the
 #### **3.2.2 Results**
 
 As an example, the following figure shows the result of predicting an image of a coast, where it can be observed that the model has correctly predicted the class of the image:
-
-<figure>
-  <img src="images/streamlit_app_example.png" alt="Example of Streamlit app's prediction over coast image" width="600">
-  <figcaption>Figure 5: Example of ConvNeXt-Large model prediction over coast image.</figcaption>
-</figure>
-
-It is worth noting that by combining both models, all the test images used in the Hackathon were correctly predicted, thus achieving first place in the event.
 
 ### **4. Conclusions**
 
