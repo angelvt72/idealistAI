@@ -42,7 +42,7 @@ def load_model(model_name, model_path, num_classes):
         base_model = models.efficientnet_b7(weights="DEFAULT")
     elif model_name == "convnext_large_1_epoch":
         base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.IMAGENET1K_V1)
-    elif model_name == "convnext_large_epoch_3":
+    elif model_name == "convnext_large_3_epochs":
         base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.DEFAULT)
 
     # Modificar la capa de salida para adaptarse al número de clases
