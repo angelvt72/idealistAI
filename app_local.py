@@ -22,6 +22,9 @@ model_name = st.selectbox(
     "Elige el modelo",
     [
         "efficientnet_rank_0",
+        # "efficientnet_rank_7",
+        "convnext_large_3_epochs",
+        # 
         "convnext_large_1_epoch",
     ],
 )

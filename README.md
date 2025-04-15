@@ -1,68 +1,68 @@
 # **Understanding CNNs**
 
-**Ángel Visedo, Pablo Rodríguez y José Carlos Riego**
+**Ángel Visedo, Pablo Rodríguez and José Carlos Riego**
 
-### **Índice**
+### **Table of Contents**
 
-- [**1. Introducción**](#1-Introduccion)
-- [**2. Requisitos**](#2-requisitos)
-- [**3. Desarrollo**](#3-desarrollo-del-proyecto)
-  - [**3.1 Entrenamiento de modelos CNN**](#31-entrenamiento-de-modelos)
-    - [**3.1.1 Estudio del efecto del _learning rate_**](#311-estudio-del-efecto-del-learning-rate)
-    - [**3.1.2 Comparación entre modelos**](#312-comparacion-entre-modelos)
-    - [**3.1.3 Obtención de métricas por clase**](#313-obtencion-de-metricas-por-clase)
-  - [**3.2 Despliegue de una app en `Streamlit`**](#32-despliegue-de-una-app-en-streamlit)
-    - [**3.2.1 Ejecución**](#321-ejecucion)
-    - [**3.2.2 Resultados**](#322-resultados)
-- [**4. Conclusiones**](#4-conclusiones)
+- [**1. Introduction**](#1-introduction)
+- [**2. Requirements**](#2-requirements)
+- [**3. Development**](#3-development)
+  - [**3.1 Training CNN Models**](#31-training-cnn-models)
+    - [**3.1.1 Study of Learning Rate Effect**](#311-study-of-learning-rate-effect)
+    - [**3.1.2 Comparison Between Models**](#312-comparison-between-models)
+    - [**3.1.3 Obtaining Metrics by Class**](#313-obtaining-metrics-by-class)
+  - [**3.2 Deployment of a Streamlit App**](#32-deployment-of-a-streamlit-app)
+    - [**3.2.1 Execution**](#321-execution)
+    - [**3.2.2 Results**](#322-results)
+- [**4. Conclusions**](#4-conclusions)
 
-## **1. Introducción**
+## **1. Introduction**
 
-Este proyecto tiene como objetivo el estudio e implementación de modelos basados en redes neuronales convolucionales (CNNs), mediante la realización de diversas comparativas en las que se analizan distintos modelos y parámetros, registrando su impacto en la calidad de las predicciones mediante `Weights and Biases (W&B)`.
+This project aims to study and implement models based on Convolutional Neural Networks (CNNs) by conducting various comparisons that analyze different models and parameters, recording their impact on prediction quality using Weights and Biases (W&B).
 
-Para ello, se ha empleado el dataset utilizado en el artículo:
+For this purpose, we used the dataset from the article:
 
-> **Lazebnik, S., Schmid, C. y Ponce, J. (2006).** _Beyond Bags of Features: Spatial Pyramid Matching for Recognizing Natural Scene Categories_. En: Proc. IEEE Conf. Computer Vision and Pattern Recognition, Vol. 2, pp. 2169–2178, 17–22 de junio de 2006.
+> **Lazebnik, S., Schmid, C., and Ponce, J. (2006).** _Beyond Bags of Features: Spatial Pyramid Matching for Recognizing Natural Scene Categories_. In: Proc. IEEE Conf. Computer Vision and Pattern Recognition, Vol. 2, pp. 2169–2178, June 17–22, 2006.
 
-Este dataset consta de diversas imágenes en blanco y negro de escenas naturales y urbanas, con hasta 15 clases distintas, y está disponible en la página oficial de `Figshare`: [15-Scene Image Dataset](https://figshare.com/articles/dataset/15-Scene_Image_Dataset/7007177).
+This dataset consists of various black and white images of natural and urban scenes, with up to 15 different classes, and is available on the official Figshare page: [15-Scene Image Dataset](https://figshare.com/articles/dataset/15-Scene_Image_Dataset/7007177).
 
-## **2. Requisitos**
+## **2. Requirements**
 
-Para poder ejecutar el proyecto, es necesario tener instalado Python 3.12.9 o superior y las siguientes librerías:
+To run the project, you need Python 3.12.9 or higher and the following libraries:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Asimismo, si se desea registrar el progreso del entrenamiento de algún modelo, bastaría con modificar la configuración de `W&B` dentro de `train_models.py`, y ejecutar el comando siguiente en la terminal, para iniciar sesión en dicho servicio:
+Also, if you want to track the training progress of any model, you can modify the W&B configuration in train_models.py and run the following command in the terminal to log into the service:
 
 ```bash
 wandb login
 ```
 
-Tras esto, se nos pedirá introducir la API key previamente creada en nuestro account dashboard, dentro de la web de W&B (https://wandb.ai/site).
+After this, you will be asked to enter the API key previously created in your account dashboard on the W&B website (https://wandb.ai/site).
 
-Finalmente, ya tendremos todas las dependencias necesarias para ejecutar el proyecto.
+Finally, you will have all the necessary dependencies to run the project.
 
-## **3. Desarrollo**
+## **3. Development**
 
-### **3.1 Entrenamiento de modelos CNN**
+### **3.1 Training CNN Models**
 
-Durante el entrenamiento de los modelos, se han fijado los siguiente parámetros:
+During model training, the following parameters were set:
 
-- `Batch size`: 8. Esto permite un tiempo razonable de entrenamiento, sin sobrecargar los recursos disponibles.
-- `Número de épocas`: 5. A priori, se estimo que podría ser una cifra adecuada para lograr buenos resultados, sin que el modelo se sobreentrene.
-- `Optimizador`: Adam. Escogido por su rápida convergencia, al implementar learning rate adaptativo y momentum.
-- `Image size`: 224 píxeles. Tamaño de las imágenes de muestra.
-- `Loss criterion`: Cross entropy. Para comparar las distribuciones de probabilidad entre las clases predicha y real.
+- Batch size: 8. This allows for a reasonable training time without overloading the available resources.
+- Number of epochs: 5. This was initially estimated to be an adequate number to achieve good results without overfitting the model.
+- Optimizer: Adam. Chosen for its rapid convergence by implementing adaptive learning rate and momentum.
+- Image size: 224 pixels. Size of the sample images.
+- Loss criterion: Cross entropy. To compare probability distributions between predicted and actual classes.
 
-#### **3.1.1 Estudio del efecto del _learning rate_**
+#### **3.1.1 Study of Learning Rate Effect**
 
-Para estudiar el efecto del learning rate, se ha entrenado el modelo `convnext-large` con diferentes valores de learning rate, y se han registrado las métricas obtenidas en cada caso.
+To study the effect of the learning rate, the ConvNeXt-Large model was trained with different learning rate values, and the metrics obtained in each case were recorded.
 
-Cabe destacar que, para el caso de learning rate = 0.0005, se ha empleado un `learning rate scheduler`, la cuál es una técnica que permite ajustar el learning rate durante el entrenamiento, para mejorar la convergencia del modelo.
+It is worth noting that, for the case of learning rate = 0.0005, a learning rate scheduler was used, which is a technique that allows adjusting the learning rate during training to improve model convergence.
 
-A continuación, se muestran los resultados obtenidos:
+The results obtained are shown below:
 
 | lr                      | 0.0001 | 0.001 | 0.0005 |
 | ----------------------- | ------ | ----- | ------ |
@@ -70,87 +70,90 @@ A continuación, se muestran los resultados obtenidos:
 | Training Accuracy (%)   | 49.1   | 95.8  | 98.4   |
 
 <figure>
-  <img src="images/train_accuracy_convnext-large.png" alt="Train Accuracy for the comparaison of section 3.1.1" width="600">
-  <figcaption>Figure 1: Evolution in train accuracy of convnext-large model with different learning rate. </figcaption>
+  <img src="images/train_accuracy_convnext-large.png" alt="Train Accuracy for the comparison of section 3.1.1" width="600">
+  <figcaption>Figure 1: Evolution in train accuracy of ConvNeXt-Large model with different learning rates.</figcaption>
 </figure>
 
 <figure>
-  <img src="images/validation_accuracy_convnext-large.png" alt="Validation Accuracy for the comparaison of section 3.1.1" width="600">
-  <figcaption>Figure 2: Evolution in validation accuracy of convnext-large model with different learning rate. </figcaption>
+  <img src="images/validation_accuracy_convnext-large.png" alt="Validation Accuracy for the comparison of section 3.1.1" width="600">
+  <figcaption>Figure 2: Evolution in validation accuracy of ConvNeXt-Large model with different learning rates.</figcaption>
 </figure>
 
-A parir de estos resultados, podemos concluir lo siguiente:
+From these results, we can conclude the following:
 
-- El learning rate óptimo de los probados para este modelo es 0.0005, ya que es el que ha obtenido la mejor accuracy en validación.
-- El modelo con learning rate = 0.0001 empeora ha sufrido un empeoramiento significativo del accuracy a partir de la primera época. Esto podría ser debido a que, con un learning rate tan bajo, e medida que el modelo va aprendiendo y se van incluyendo imágenes nuevas, el optimizador no es capaz de realizar los cambios necesarios en los pesos de la red para mejorar la predicción.
-- En todos los casos, observanmos una diferencia de accuracy en train y validación de al menos 6 puntos porcentuales. Esto indica la presencia clara de overfitting, que podría haberse evitado reduciendo el número de épocas, o empleando técnicas como el dropout o la regularización L2.
-- El uso de `learning rate scheduler` ha permitido mejorar la convergencia del modelo, ya que el learning rate se ha ido ajustando a medida que el modelo iba aprendiendo. Esto se puede observar en la gráfica de accuracy, donde la curva de validación es más suave y presenta menos picos.
+- The optimal learning rate among those tested for this model is 0.0005, as it achieved the best validation accuracy.
+- The model with learning rate = 0.0001 experienced a significant deterioration in accuracy after the first epoch. This could be due to the fact that, with such a low learning rate, as the model learns and new images are included, the optimizer is unable to make the necessary changes to the network weights to improve prediction.
+- In all cases, we observe a difference in accuracy between training and validation of at least 6 percentage points. This clearly indicates the presence of overfitting, which could have been prevented by reducing the number of epochs or using techniques such as dropout or L2 regularization.
+- The use of a learning rate scheduler has improved model convergence, as the learning rate has been adjusted as the model learned. This can be observed in the accuracy graph, where the validation curve is smoother and shows fewer peaks.
 
-#### **3.1.2 Comparación entre modelos**
+#### **3.1.2 Comparison Between Models**
 
-En este apartado, se ha establecido el learning rate a 0.0005 y el learning rate scheduler, y se han entrenado los siguientes modelos:
+In this section, the learning rate was set to 0.0005 with a learning rate scheduler, and the following models were trained:
 
-- `convnext-large`
-- `efficientnet-b0`
+- ConvNeXt-Large
+- EfficientNet-B0
 
-| Model                   | efficientnet-b0 | convnext-large |
+| Model                   | EfficientNet-B0 | ConvNeXt-Large |
 | ----------------------- | --------------- | -------------- |
 | Validation Accuracy (%) | 89.5            | 92.9           |
 | Training Accuracy (%)   | 93.6            | 98.4           |
 
 <figure>
-  <img src="images/train_accuracy_same_lr.png" alt="Train Accuracy for the comparaison of section 3.1.2" width="600">
-  <figcaption>Figure 3: Evolution in train accuracy of different CNN models with same learning rate. </figcaption>
+  <img src="images/train_accuracy_same_lr.png" alt="Train Accuracy for the comparison of section 3.1.2" width="600">
+  <figcaption>Figure 3: Evolution in train accuracy of different CNN models with the same learning rate.</figcaption>
 </figure>
 
 <figure>
-  <img src="images/validation_accuracy_same_lr.png" alt="Validation Accuracy for the comparaison of section 3.1.2" width="600">
-  <figcaption>Figure 4: Evolution in validation accuracy of different CNN models with same learning rate. </figcaption>
+  <img src="images/validation_accuracy_same_lr.png" alt="Validation Accuracy for the comparison of section 3.1.2" width="600">
+  <figcaption>Figure 4: Evolution in validation accuracy of different CNN models with the same learning rate.</figcaption>
 </figure>
 
-Como se puede observar, `ConvNeXt-Large` supera a `EfficientNet-B0` de manera sólida en este problema. La razón de esto podría ser que, a pesar de la alta eficiencia de EfficientNet-B0 (alrededor de 5.3M de parámetros), ConvNeXt-Large, con aproximadamente 198M de parámetros, ofrece una mayor capacidad para aprender representaciones complejas y detalladas, lo que se traduce en un desempeño superior en precisión y generalización.
+As can be observed, ConvNeXt-Large consistently outperforms EfficientNet-B0 in this problem. The reason for this could be that, despite the high efficiency of EfficientNet-B0 (around 5.3M parameters), ConvNeXt-Large, with approximately 198M parameters, offers a greater capacity to learn complex and detailed representations, which translates into superior performance in accuracy and generalization.
 
-#### **3.1.3 Obtención de métricas por clase**
+#### **3.1.3 Obtaining Metrics by Class**
 
-GRÁFICA ÁNGEL Y CONTEMPLAR ENSABLAMDO MODELOS CNN
+[ANGEL'S GRAPH AND CONSIDERATION OF ENSEMBLING CNN MODELS]
 
-### **3.2 Despliegue de una app en `Streamlit`**
+### **3.2 Deployment of a Streamlit App**
 
-Para el despliegue de la aplicación, se ha utilizado `Streamlit`, una herramienta que permite crear aplicaciones web de manera sencilla y rápida, ideal para la visualización de modelos de machine learning.
+For the deployment of the application, Streamlit was used, a tool that allows creating web applications easily and quickly, ideal for visualizing machine learning models.
 
-#### **3.2.1 Ejecución**
+#### **3.2.1 Execution**
 
-Para ejecutar la aplicación, existen dos maneras.
+There are two ways to run the application.
 
-En primer lugar, se puede acceder a través del siguiente enlace:
+First, you can access it through the following link:
 [Streamlit App](https://idealistai.streamlit.app/)
 
-Por otro lado, si se desea ejecutar en local, basta con ejecutar el siguiente comando en la terminal:
+Alternatively, if you want to run it locally, simply execute the following command in the terminal:
 
 ```bash
 streamlit run app.py
 ```
 
-Esto abrirá una nueva ventana en el navegador, donde se podrá interactuar con la aplicación.
+This will open a new window in the browser where you can interact with the application.
 
-Así, para predecir la clase de una imagen, basta con elegir el modelo deseado y cargar la imagen. Después, se mostrará las 3 clases con mayor probabilidad de ser la correcta, junto con su probabilidad asociada.
+To predict the class of an image, simply choose the desired model and upload the image. Then, the 3 classes with the highest probability of being correct will be shown, along with their associated probability.
 
-#### **3.2.2 Resultados**
+#### **3.2.2 Results**
 
-A modo de ejemplo, se muestra en la siguiente figura el resultado de la predicción de una imagen de una costa, donde se observa que el modelo ha predicho correctamente la clase de la imagen:
+As an example, the following figure shows the result of predicting an image of a coast, where it can be observed that the model has correctly predicted the class of the image:
 
-INSERTAR IMAGEN
+<figure>
+  <img src="images/streamlit_app_example.png" alt="Example of Streamlit app's prediction over coast image" width="600">
+  <figcaption>Figure 5: Example of ConvNeXt-Large model prediction over coast image.</figcaption>
+</figure>
 
-### **4. Conclusiones**
+### **4. Conclusions**
 
-En este proyecto, se han podido obtener las siguientes conclusiones:
+In this project, the following conclusions have been drawn:
 
-1. El learning rate es un parámetro clave en el entrenamiento de modelos de machine learning, y su elección puede afectar significativamente la convergencia y el rendimiento del modelo, siendo preciso encontrar un valor que evite la divergencia de la optimización, sin ser excesivamente pequeño para no entorpecer el proceso de aprendizaje.
+1. The learning rate is a key parameter in training machine learning models, and its choice can significantly affect the convergence and performance of the model. It is necessary to find a value that avoids optimization divergence without being excessively small to not hinder the learning process.
 
-2. El uso de `learning rate scheduler` ha permitido mejorar la convergencia del modelo, al ajustar el learning rate durante el entrenamiento.
+2. The use of a learning rate scheduler has improved model convergence by adjusting the learning rate during training.
 
-3. El modelo `ConvNeXt-Large` ha demostrado ser superior al `EfficientNet-B0` en este problema, lo que destaca la mejora que supone aumentar el número de parámetros del modelo, a costa de un mayor tiempo de entrenamiento y uso de recursos.
+3. The ConvNeXt-Large model has proven to be superior to EfficientNet-B0 in this problem, highlighting the improvement that comes with increasing the number of model parameters, at the cost of longer training time and resource usage.
 
-4. El overfitting ha sido el mayor desafío localizado en este proyecto, y, en futuras implementaciones, se deberían ajustar parámetros como el número de épocas, o emplear técnicas como el dropout o la regularización L2, para evitarlo.
+4. Overfitting has been the biggest challenge identified in this project, and in future implementations, parameters such as the number of epochs should be adjusted, or techniques such as dropout or L2 regularization should be employed to avoid it.
 
-5. Con el fin de lograr una precisión adecuada en todas las clases, lo ideal sería implantar un modelo de ensamblado, que combine los resultados de varios modelos, para mejorar la precisión y la robustez del sistema.
+5. In order to achieve adequate precision across all classes, the ideal approach would be to implement an ensemble model that combines the results of several models to improve the accuracy and robustness of the system.
