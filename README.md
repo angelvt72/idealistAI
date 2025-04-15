@@ -20,7 +20,7 @@
 
 This project aims to study and implement models based on Convolutional Neural Networks (CNNs) by conducting various comparisons that analyze different models and parameters, recording their impact on prediction quality using Weights and Biases (W&B).
 
-For this purpose, we used the dataset from the article:
+For this purpose, we have used the dataset from the article:
 
 > **Lazebnik, S., Schmid, C., and Ponce, J. (2006).** _Beyond Bags of Features: Spatial Pyramid Matching for Recognizing Natural Scene Categories_. In: Proc. IEEE Conf. Computer Vision and Pattern Recognition, Vol. 2, pp. 2169–2178, June 17–22, 2006.
 
