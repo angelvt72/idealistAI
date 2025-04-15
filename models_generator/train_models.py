@@ -150,7 +150,7 @@ def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
         
         # Setup W&B
         wandb.init(
-            project="IdealistAI",
+            project="Understanding-CNNs",
             config={
                 "model": f"{model_choice}_{epochs}_epochs_{learning_rate}_lr",
                 "epochs": epochs,

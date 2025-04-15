@@ -144,7 +144,7 @@ def train(rank, world_size):
 
         # Configurar W&B con valores numéricos en lugar de strings
         wandb.init(
-            project="IdealistAI",
+            project="Understanding-CNNs",
             config={
                 "model": f"convnext_large_{epochs}_epochs_{learning_rate}_lr",
                 "epochs": epochs,

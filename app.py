@@ -10,61 +10,61 @@ from models_generator.training_validation_models.prediction_pipeline_modelos imp
     process_image,
 )
 
-# Configuración de la página de Streamlit
-st.set_page_config(page_title="Clasificación de Imágenes", layout="centered")
+# Streamlit page configuration
+st.set_page_config(page_title="Image Classification", layout="centered")
 
-# Encabezado de la aplicación
-st.title("🔍 Clasificación de Imágenes con IA")
-st.write("Sube una imagen y el modelo te dirá qué es con su probabilidad.")
+# Application header
+st.title("🔍 AI Image Classification")
+st.write("Upload an image and the model will tell you what it is along with its probability.")
 
-# Selección del modelo
+# Model selection
 model_name = st.selectbox(
-    "Elige el modelo",
+    "Choose the model",
     [
         "efficientnet_rank_0",
         "convnext_large_1_epoch",
     ],
 )
 
-# Subir imagen
+# Upload image
 uploaded_file = st.file_uploader(
-    "Elige una imagen", type=["jpg", "jpeg", "png", "bmp", "tif", "tiff", "webp"]
+    "Choose an image", type=["jpg", "jpeg", "png", "bmp", "tif", "tiff", "webp"]
 )
 
-# Si se subió una imagen, procesarla y hacer la predicción
+# If an image is uploaded, process it and make a prediction
 if uploaded_file is not None:
 
-    # Abrir la imagen y mostrarla
+    # Open and display the image
     image = Image.open(uploaded_file)
-    st.image(image, caption="Imagen cargada", use_column_width=True)
+    st.image(image, caption="Loaded Image", use_column_width=True)
 
-    # Procesar la imagen
+    # Process the image
     image_tensor = process_image(image)
 
-    # Verificar si la imagen se procesó correctamente
+    # Check if the image was processed correctly
     if image_tensor is not None:
 
-        # Obtener predicciones
+        # Get predictions
         results = prediction_process(image_tensor, model_name)
 
-        # Verificar si hubo un error al cargar el modelo
+        # Check if there was an error loading the model
         if "error" in results:
-            st.error(f"❌ Error al cargar el modelo: {results['error']}")
+            st.error(f"❌ Error loading model: {results['error']}")
         else:
-            # Extraer la mejor predicción
+            # Extract the best prediction
             best_class = max(results, key=results.get)
-            best_prob = float(results[best_class]) * 100  # Convertir a porcentaje
+            best_prob = float(results[best_class]) * 100  # Convert to percentage
 
-            # Mostrar la mejor predicción
+            # Display the best prediction
             st.subheader(
-                f"📌 Predicción principal: **{best_class}** ({best_prob:.2f}%)"
+                f"📌 Main prediction: **{best_class}** ({best_prob:.2f}%)"
             )
 
-            # Mostrar todas las predicciones con barras de progreso
-            st.write("### 📊 Probabilidades:")
+            # Display all predictions with progress bars
+            st.write("### 📊 Probabilities:")
             for class_name, prob in results.items():
                 prob_float = float(prob)
                 st.write(f"**{class_name}**: {prob_float * 100:.2f}%")
                 st.progress(prob_float)
     else:
-        st.error("❌ No se pudo procesar la imagen. Intenta con otro archivo.")
+        st.error("❌ Could not process the image. Try another file.")

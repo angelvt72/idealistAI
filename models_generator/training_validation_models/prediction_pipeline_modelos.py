@@ -40,7 +40,7 @@ def load_model(model_name, model_path, num_classes):
         base_model = models.efficientnet_b0(weights="IMAGENET1K_V1")
     elif model_name == "efficientnet_rank_7":
         base_model = models.efficientnet_b7(weights="DEFAULT")
-    elif model_name == "convnext_large_1_epoch":
+    elif model_name in ["convnext_large_1_epoch", "convnext_large_1_epoch_local"]:
         base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.IMAGENET1K_V1)
     elif model_name == "convnext_large_3_epochs":
         base_model = models.convnext_large(weights=models.ConvNeXt_Large_Weights.DEFAULT)
@@ -51,7 +51,7 @@ def load_model(model_name, model_path, num_classes):
             base_model.classifier[1].in_features, num_classes
         )
 
-    elif model_name == "convnext_large_1_epoch":
+    elif model_name in ["convnext_large_1_epoch", "convnext_large_1_epoch_local"]:
         in_features = base_model.classifier[-1].in_features
         classifier = torch.nn.Sequential(
         torch.nn.Linear(in_features, 512),
@@ -64,12 +64,12 @@ def load_model(model_name, model_path, num_classes):
     elif model_name == "convnext_large_3_epochs":
         base_model.classifier[2] = nn.Linear(base_model.classifier[2].in_features, num_classes)
     
-
     else:
         raise ValueError(f"Modelo no soportado: {model_name}")
 
     # Cargar los pesos entrenados previamente
     try:
+        print(f"Cargando pesos del modelo desde: {model_path}")  
         state_dict = torch.load(model_path, map_location=torch.device("cpu"))
         base_model.load_state_dict(state_dict, strict=False)
         base_model.eval()

@@ -7,7 +7,7 @@ with open("./wandb/README_for_w&b_report.md", "r", encoding="utf-8") as f:
 
 # Configuración de tu entidad y proyecto en W&B
 entity = "jcriego-prsoria-angelvt"
-project = "IdealistAI"
+project = "Understanding-CNNs"
 
 # Crea el reporte en W&B
 report = wr.Report(
