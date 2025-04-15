@@ -15,14 +15,15 @@ st.set_page_config(page_title="Image Classification", layout="centered")
 
 # Application header
 st.title("🔍 AI Image Classification")
-st.write("Upload an image and the model will tell you what it is along with its probability.")
+st.write(
+    "Upload an image and the model will tell you what it is along with its probability."
+)
 
 # Model selection
 model_name = st.selectbox(
     "Choose the model",
     [
-        "efficientnet_rank_0",
-        "convnext_large_1_epoch",
+        "efficientnet_b0",
     ],
 )
 
@@ -56,9 +57,7 @@ if uploaded_file is not None:
             best_prob = float(results[best_class]) * 100  # Convert to percentage
 
             # Display the best prediction
-            st.subheader(
-                f"📌 Main prediction: **{best_class}** ({best_prob:.2f}%)"
-            )
+            st.subheader(f"📌 Main prediction: **{best_class}** ({best_prob:.2f}%)")
 
             # Display all predictions with progress bars
             st.write("### 📊 Probabilities:")

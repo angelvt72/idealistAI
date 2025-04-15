@@ -128,7 +128,7 @@ First, you can access it through the following link:
 Alternatively, if you want to run it locally, simply execute the following command in the terminal:
 
 ```bash
-streamlit run app.py
+streamlit run app_local.py
 ```
 
 This will open a new window in the browser where you can interact with the application.

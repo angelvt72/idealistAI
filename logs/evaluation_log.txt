@@ -1,0 +1,207 @@
+2025-04-15 19:03:51,866 - INFO - Usando CPU
+2025-04-15 19:03:51,868 - INFO - Dataset de validación cargado con 1 imágenes.
+2025-04-15 19:03:51,868 - INFO - Clases encontradas: ['kitchen']
+2025-04-15 19:03:51,869 - INFO - 
+==================================================
+2025-04-15 19:03:51,870 - INFO - Evaluando el modelo: convnext_large_1_epoch
+2025-04-15 19:03:51,870 - INFO - Cargando el modelo: convnext_large_1_epoch
+2025-04-15 19:04:00,032 - INFO - ConvNeXt Large model selected
+2025-04-15 19:04:00,755 - WARNING - No se pudieron cargar los pesos con strict=True. Error: Error(s) in loading state_dict for ConvNeXt:
+	Missing key(s) in state_dict: "classifier.2.weight", "classifier.2.bias". 
+	Unexpected key(s) in state_dict: "classifier.2.0.weight", "classifier.2.0.bias", "classifier.2.3.weight", "classifier.2.3.bias". 
+2025-04-15 19:04:00,756 - WARNING - Intentando cargar con strict=False...
+2025-04-15 19:04:00,878 - INFO - Pesos cargados con strict=False para convnext_large_1_epoch
+2025-04-15 19:04:13,924 - INFO - Loss promedio: 0.0000
+2025-04-15 19:04:13,925 - INFO - Precisión global: 100.00%
+2025-04-15 19:04:13,925 - INFO - Precisión por clase:
+2025-04-15 19:04:13,925 - INFO - kitchen: 100.00%
+2025-04-15 19:04:14,877 - INFO - Gráfico guardado en ../results/convnext_large_1_epoch_class_accuracy.png
+2025-04-15 19:04:17,540 - INFO - 
+==================================================
+2025-04-15 19:04:17,541 - INFO - Evaluando el modelo: convnext_large_epoch_3
+2025-04-15 19:04:17,541 - INFO - Cargando el modelo: convnext_large_epoch_3
+2025-04-15 19:04:26,092 - INFO - ConvNeXt Large model selected
+2025-04-15 19:04:27,190 - WARNING - No se pudieron cargar los pesos con strict=True. Error: Error(s) in loading state_dict for ConvNeXt:
+	size mismatch for classifier.2.weight: copying a param with shape torch.Size([15, 1536]) from checkpoint, the shape in current model is torch.Size([1, 1536]).
+	size mismatch for classifier.2.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([1]).
+2025-04-15 19:04:27,190 - WARNING - Intentando cargar con strict=False...
+2025-04-15 19:04:27,334 - ERROR - Error al cargar el modelo convnext_large_epoch_3: Error(s) in loading state_dict for ConvNeXt:
+	size mismatch for classifier.2.weight: copying a param with shape torch.Size([15, 1536]) from checkpoint, the shape in current model is torch.Size([1, 1536]).
+	size mismatch for classifier.2.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([1]).
+2025-04-15 19:04:27,747 - ERROR - No se pudo cargar el modelo convnext_large_epoch_3. Continuando con el siguiente.
+2025-04-15 19:04:27,747 - INFO - 
+==================================================
+2025-04-15 19:04:27,747 - INFO - Evaluando el modelo: efficientnet_rank_0
+2025-04-15 19:04:27,748 - INFO - Cargando el modelo: efficientnet_rank_0
+2025-04-15 19:04:27,748 - ERROR - Error al cargar el modelo efficientnet_rank_0: Modelo no soportado: efficientnet_rank_0. Opciones disponibles: convnext_large, efficientnet_b0, efficientnet_b7
+2025-04-15 19:04:27,748 - ERROR - No se pudo cargar el modelo efficientnet_rank_0. Continuando con el siguiente.
+2025-04-15 19:05:30,814 - INFO - Usando CPU
+2025-04-15 19:05:30,815 - INFO - Dataset de validación cargado con 1 imágenes.
+2025-04-15 19:05:30,815 - INFO - Clases encontradas: ['kitchen']
+2025-04-15 19:05:30,815 - INFO - 
+==================================================
+2025-04-15 19:05:30,816 - INFO - Evaluando el modelo: efficientnet_b0
+2025-04-15 19:05:30,816 - INFO - Cargando el modelo: efficientnet_b0
+2025-04-15 19:05:30,953 - INFO - EfficientNet-B0 model selected
+2025-04-15 19:05:30,989 - WARNING - No se pudieron cargar los pesos con strict=True. Error: Error(s) in loading state_dict for EfficientNet:
+	size mismatch for classifier.1.weight: copying a param with shape torch.Size([15, 1280]) from checkpoint, the shape in current model is torch.Size([1, 1280]).
+	size mismatch for classifier.1.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([1]).
+2025-04-15 19:05:30,990 - WARNING - Intentando cargar con strict=False...
+2025-04-15 19:05:31,001 - ERROR - Error al cargar el modelo efficientnet_b0: Error(s) in loading state_dict for EfficientNet:
+	size mismatch for classifier.1.weight: copying a param with shape torch.Size([15, 1280]) from checkpoint, the shape in current model is torch.Size([1, 1280]).
+	size mismatch for classifier.1.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([1]).
+2025-04-15 19:05:31,008 - ERROR - No se pudo cargar el modelo efficientnet_b0. Continuando con el siguiente.
+2025-04-15 19:05:31,008 - INFO - 
+==================================================
+2025-04-15 19:05:31,008 - INFO - Evaluando el modelo: convnext_large_1_epoch
+2025-04-15 19:05:31,008 - INFO - Cargando el modelo: convnext_large_1_epoch
+2025-04-15 19:05:39,644 - INFO - ConvNeXt Large model selected
+2025-04-15 19:05:40,442 - WARNING - No se pudieron cargar los pesos con strict=True. Error: Error(s) in loading state_dict for ConvNeXt:
+	Missing key(s) in state_dict: "classifier.2.weight", "classifier.2.bias". 
+	Unexpected key(s) in state_dict: "classifier.2.0.weight", "classifier.2.0.bias", "classifier.2.3.weight", "classifier.2.3.bias". 
+2025-04-15 19:05:40,442 - WARNING - Intentando cargar con strict=False...
+2025-04-15 19:05:40,552 - INFO - Pesos cargados con strict=False para convnext_large_1_epoch
+2025-04-15 19:05:53,958 - INFO - Loss promedio: 0.0000
+2025-04-15 19:05:53,959 - INFO - Precisión global: 100.00%
+2025-04-15 19:05:53,959 - INFO - Precisión por clase:
+2025-04-15 19:05:53,959 - INFO - kitchen: 100.00%
+2025-04-15 19:05:54,448 - INFO - Gráfico guardado en ../results/convnext_large_1_epoch_class_accuracy.png
+2025-04-15 19:05:57,819 - INFO - 
+==================================================
+2025-04-15 19:05:57,819 - INFO - Evaluando el modelo: convnext_large_epoch_3
+2025-04-15 19:05:57,819 - INFO - Cargando el modelo: convnext_large_epoch_3
+2025-04-15 19:06:06,638 - INFO - ConvNeXt Large model selected
+2025-04-15 19:06:07,487 - WARNING - No se pudieron cargar los pesos con strict=True. Error: Error(s) in loading state_dict for ConvNeXt:
+	size mismatch for classifier.2.weight: copying a param with shape torch.Size([15, 1536]) from checkpoint, the shape in current model is torch.Size([1, 1536]).
+	size mismatch for classifier.2.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([1]).
+2025-04-15 19:06:07,487 - WARNING - Intentando cargar con strict=False...
+2025-04-15 19:06:07,608 - ERROR - Error al cargar el modelo convnext_large_epoch_3: Error(s) in loading state_dict for ConvNeXt:
+	size mismatch for classifier.2.weight: copying a param with shape torch.Size([15, 1536]) from checkpoint, the shape in current model is torch.Size([1, 1536]).
+	size mismatch for classifier.2.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([1]).
+2025-04-15 19:06:08,074 - ERROR - No se pudo cargar el modelo convnext_large_epoch_3. Continuando con el siguiente.
+2025-04-15 19:21:30,755 - INFO - Usando CPU
+2025-04-15 19:22:01,564 - INFO - Usando CPU
+2025-04-15 19:22:01,581 - INFO - Dataset de validación cargado con 1500 imágenes.
+2025-04-15 19:22:01,581 - INFO - Clases encontradas: ['Bedroom', 'Coast', 'Forest', 'Highway', 'Industrial', 'Inside city', 'Kitchen', 'Living room', 'Mountain', 'Office', 'Open country', 'Store', 'Street', 'Suburb', 'Tall building']
+2025-04-15 19:22:01,582 - INFO - 
+==================================================
+2025-04-15 19:22:01,582 - INFO - Evaluando el modelo: efficientnet_b0_5epochs_0
+2025-04-15 19:22:01,582 - INFO - Cargando el modelo: efficientnet_b0_5epochs_0
+2025-04-15 19:22:01,782 - INFO - EfficientNet-B0 model selected
+2025-04-15 19:22:01,824 - INFO - Pesos cargados correctamente para efficientnet_b0_5epochs_0
+2025-04-15 19:23:14,150 - INFO - Usando CPU
+2025-04-15 19:23:14,158 - INFO - Dataset de validación cargado con 1500 imágenes.
+2025-04-15 19:23:14,158 - INFO - Clases encontradas: ['Bedroom', 'Coast', 'Forest', 'Highway', 'Industrial', 'Inside city', 'Kitchen', 'Living room', 'Mountain', 'Office', 'Open country', 'Store', 'Street', 'Suburb', 'Tall building']
+2025-04-15 19:23:14,158 - INFO - 
+==================================================
+2025-04-15 19:23:14,158 - INFO - Evaluando el modelo: efficientnet_b0_5epochs_0
+2025-04-15 19:23:14,158 - INFO - Cargando el modelo: efficientnet_b0_5epochs_0
+2025-04-15 19:23:14,315 - INFO - EfficientNet-B0 model selected
+2025-04-15 19:23:14,361 - INFO - Pesos cargados correctamente para efficientnet_b0_5epochs_0
+2025-04-15 19:24:47,876 - INFO - Loss promedio: 0.3380
+2025-04-15 19:24:47,885 - INFO - Precisión global: 89.47%
+2025-04-15 19:24:47,885 - INFO - Precisión por clase:
+2025-04-15 19:24:47,885 - INFO - Bedroom: 86.00%
+2025-04-15 19:24:47,885 - INFO - Coast: 96.00%
+2025-04-15 19:24:47,885 - INFO - Forest: 99.00%
+2025-04-15 19:24:47,885 - INFO - Highway: 95.00%
+2025-04-15 19:24:47,885 - INFO - Industrial: 76.00%
+2025-04-15 19:24:47,885 - INFO - Inside city: 94.00%
+2025-04-15 19:24:47,886 - INFO - Kitchen: 92.00%
+2025-04-15 19:24:47,886 - INFO - Living room: 80.00%
+2025-04-15 19:24:47,886 - INFO - Mountain: 89.00%
+2025-04-15 19:24:47,886 - INFO - Office: 98.00%
+2025-04-15 19:24:47,886 - INFO - Open country: 71.00%
+2025-04-15 19:24:47,886 - INFO - Store: 86.00%
+2025-04-15 19:24:47,887 - INFO - Street: 97.00%
+2025-04-15 19:24:47,887 - INFO - Suburb: 100.00%
+2025-04-15 19:24:47,887 - INFO - Tall building: 83.00%
+2025-04-15 19:24:48,549 - INFO - Gráfico guardado en ../images/results/efficientnet_b0_5epochs_0_class_accuracy.png
+2025-04-15 19:24:59,224 - INFO - 
+==================================================
+2025-04-15 19:24:59,225 - INFO - Evaluando el modelo: efficientnet_b0
+2025-04-15 19:24:59,225 - INFO - Cargando el modelo: efficientnet_b0
+2025-04-15 19:24:59,698 - INFO - EfficientNet-B0 model selected
+2025-04-15 19:24:59,745 - INFO - Pesos cargados correctamente para efficientnet_b0
+2025-04-15 19:26:34,457 - INFO - Loss promedio: 0.2471
+2025-04-15 19:26:34,459 - INFO - Precisión global: 93.20%
+2025-04-15 19:26:34,459 - INFO - Precisión por clase:
+2025-04-15 19:26:34,460 - INFO - Bedroom: 77.00%
+2025-04-15 19:26:34,460 - INFO - Coast: 98.00%
+2025-04-15 19:26:34,460 - INFO - Forest: 98.00%
+2025-04-15 19:26:34,460 - INFO - Highway: 96.00%
+2025-04-15 19:26:34,460 - INFO - Industrial: 83.00%
+2025-04-15 19:26:34,460 - INFO - Inside city: 93.00%
+2025-04-15 19:26:34,460 - INFO - Kitchen: 92.00%
+2025-04-15 19:26:34,460 - INFO - Living room: 88.00%
+2025-04-15 19:26:34,461 - INFO - Mountain: 100.00%
+2025-04-15 19:26:34,461 - INFO - Office: 97.00%
+2025-04-15 19:26:34,461 - INFO - Open country: 84.00%
+2025-04-15 19:26:34,461 - INFO - Store: 96.00%
+2025-04-15 19:26:34,461 - INFO - Street: 100.00%
+2025-04-15 19:26:34,461 - INFO - Suburb: 99.00%
+2025-04-15 19:26:34,461 - INFO - Tall building: 97.00%
+2025-04-15 19:26:34,776 - INFO - Gráfico guardado en ../images/results/efficientnet_b0_class_accuracy.png
+2025-04-15 19:26:40,080 - INFO - 
+==================================================
+2025-04-15 19:26:40,080 - INFO - Evaluando el modelo: convnext_large_1_epoch
+2025-04-15 19:26:40,080 - INFO - Cargando el modelo: convnext_large_1_epoch
+2025-04-15 19:26:48,346 - INFO - ConvNeXt Large model selected
+2025-04-15 19:26:49,027 - WARNING - No se pudieron cargar los pesos con strict=True. Error: Error(s) in loading state_dict for ConvNeXt:
+	Missing key(s) in state_dict: "classifier.2.weight", "classifier.2.bias". 
+	Unexpected key(s) in state_dict: "classifier.2.0.weight", "classifier.2.0.bias", "classifier.2.3.weight", "classifier.2.3.bias". 
+2025-04-15 19:26:49,027 - WARNING - Intentando cargar con strict=False...
+2025-04-15 19:26:49,146 - INFO - Pesos cargados con strict=False para convnext_large_1_epoch
+2025-04-15 19:37:18,194 - INFO - Loss promedio: 2.7821
+2025-04-15 19:37:18,197 - INFO - Precisión global: 0.80%
+2025-04-15 19:37:18,197 - INFO - Precisión por clase:
+2025-04-15 19:37:18,198 - INFO - Bedroom: 0.00%
+2025-04-15 19:37:18,198 - INFO - Coast: 0.00%
+2025-04-15 19:37:18,198 - INFO - Forest: 1.00%
+2025-04-15 19:37:18,198 - INFO - Highway: 0.00%
+2025-04-15 19:37:18,198 - INFO - Industrial: 0.00%
+2025-04-15 19:37:18,198 - INFO - Inside city: 0.00%
+2025-04-15 19:37:18,198 - INFO - Kitchen: 0.00%
+2025-04-15 19:37:18,198 - INFO - Living room: 0.00%
+2025-04-15 19:37:18,198 - INFO - Mountain: 0.00%
+2025-04-15 19:37:18,198 - INFO - Office: 0.00%
+2025-04-15 19:37:18,199 - INFO - Open country: 0.00%
+2025-04-15 19:37:18,199 - INFO - Store: 4.00%
+2025-04-15 19:37:18,199 - INFO - Street: 0.00%
+2025-04-15 19:37:18,199 - INFO - Suburb: 0.00%
+2025-04-15 19:37:18,199 - INFO - Tall building: 7.00%
+2025-04-15 19:37:18,529 - INFO - Gráfico guardado en ../images/results/convnext_large_1_epoch_class_accuracy.png
+2025-04-15 19:37:32,007 - INFO - 
+==================================================
+2025-04-15 19:37:32,007 - INFO - Evaluando el modelo: convnext_large_epoch_3
+2025-04-15 19:37:32,007 - INFO - Cargando el modelo: convnext_large_epoch_3
+2025-04-15 19:37:40,245 - INFO - ConvNeXt Large model selected
+2025-04-15 19:37:40,912 - INFO - Pesos cargados correctamente para convnext_large_epoch_3
+2025-04-15 19:48:40,472 - INFO - Loss promedio: 0.0945
+2025-04-15 19:48:40,475 - INFO - Precisión global: 97.40%
+2025-04-15 19:48:40,476 - INFO - Precisión por clase:
+2025-04-15 19:48:40,476 - INFO - Bedroom: 96.00%
+2025-04-15 19:48:40,476 - INFO - Coast: 96.00%
+2025-04-15 19:48:40,476 - INFO - Forest: 96.00%
+2025-04-15 19:48:40,476 - INFO - Highway: 98.00%
+2025-04-15 19:48:40,476 - INFO - Industrial: 95.00%
+2025-04-15 19:48:40,476 - INFO - Inside city: 96.00%
+2025-04-15 19:48:40,477 - INFO - Kitchen: 99.00%
+2025-04-15 19:48:40,477 - INFO - Living room: 97.00%
+2025-04-15 19:48:40,477 - INFO - Mountain: 99.00%
+2025-04-15 19:48:40,477 - INFO - Office: 99.00%
+2025-04-15 19:48:40,477 - INFO - Open country: 94.00%
+2025-04-15 19:48:40,477 - INFO - Store: 98.00%
+2025-04-15 19:48:40,477 - INFO - Street: 100.00%
+2025-04-15 19:48:40,477 - INFO - Suburb: 100.00%
+2025-04-15 19:48:40,477 - INFO - Tall building: 98.00%
+2025-04-15 19:48:40,812 - INFO - Gráfico guardado en ../images/results/convnext_large_epoch_3_class_accuracy.png
+2025-04-15 19:49:51,366 - INFO - 
+================================================================================
+2025-04-15 19:49:51,366 - INFO - COMPARACIÓN DE MODELOS
+2025-04-15 19:49:51,366 - INFO - ================================================================================
+2025-04-15 19:49:51,367 - INFO - 1. convnext_large_epoch_3: Precisión = 97.40%, Loss = 0.0945
+2025-04-15 19:49:51,367 - INFO - 2. efficientnet_b0: Precisión = 93.20%, Loss = 0.2471
+2025-04-15 19:49:51,367 - INFO - 3. efficientnet_b0_5epochs_0: Precisión = 89.47%, Loss = 0.3380
+2025-04-15 19:49:51,367 - INFO - 4. convnext_large_1_epoch: Precisión = 0.80%, Loss = 2.7821
+2025-04-15 19:49:51,565 - INFO - Gráfico de comparación guardado en ../images/results/model_comparison.png
