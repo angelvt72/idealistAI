@@ -61,7 +61,7 @@ def load_model(model_name, model_path, num_classes):
         )
         base_model.classifier[-1] = classifier
 
-    elif model_name == "convnext_large_epoch_3":
+    elif model_name == "convnext_large_3_epochs":
         base_model.classifier[2] = nn.Linear(base_model.classifier[2].in_features, num_classes)
     
 
