@@ -18,7 +18,7 @@
 
 ## **1. Introducción**
 
-Este proyecto tiene como objetivo el estudio e implementación de modelos basados en redes neuronales convolucionales (CNNs), mediante la realización de diversas comparativas en las que se analizan distintos modelos y parámetros, registrando su impacto en la calidad de las predicciones mediante `Weights and Biases`.
+Este proyecto tiene como objetivo el estudio e implementación de modelos basados en redes neuronales convolucionales (CNNs), mediante la realización de diversas comparativas en las que se analizan distintos modelos y parámetros, registrando su impacto en la calidad de las predicciones mediante `Weights and Biases (W&B)`.
 
 Para ello, se ha empleado el dataset utilizado en el artículo:
 
@@ -34,7 +34,15 @@ Para poder ejecutar el proyecto, es necesario tener instalado Python 3.12.9 o su
 pip install -r requirements.txt
 ```
 
-Con esto, ya tenremos todas las dependencias necesarias para ejecutar el proyecto.
+Asimismo, si se desea registrar el progreso del entrenamiento de algún modelo, bastaría con modificar la configuración de `W&B` dentro de `train_models.py`, y ejecutar el comando siguiente en la terminal, para iniciar sesión en dicho servicio:
+
+```bash
+wandb login
+```
+
+Tras esto, se nos pedirá introducir la API key previamente creada en nuestro account dashboard, dentro de la web de W&B (https://wandb.ai/site).
+
+Finalmente, ya tendremos todas las dependencias necesarias para ejecutar el proyecto.
 
 ## **3. Desarrollo**
 
@@ -43,7 +51,7 @@ Con esto, ya tenremos todas las dependencias necesarias para ejecutar el proyect
 Durante el entrenamiento de los modelos, se han fijado los siguiente parámetros:
 
 - `Batch size`: 8. Esto permite un tiempo razonable de entrenamiento, sin sobrecargar los recursos disponibles.
-- `Número de épocas`: 5
+- `Número de épocas`: 5. A priori, se estimo que podría ser una cifra adecuada para lograr buenos resultados, sin que el modelo se sobreentrene.
 - `Optimizador`: Adam. Escogido por su rápida convergencia, al implementar learning rate adaptativo y momentum.
 - `Image size`: 224 píxeles. Tamaño de las imágenes de muestra.
 - `Loss criterion`: Cross entropy. Para comparar las distribuciones de probabilidad entre las clases predicha y real.
@@ -67,7 +75,7 @@ A parir de estos resultados, podemos concluir lo siguiente:
 
 - El learning rate óptimo de los probados para este modelo es 0.0005, ya que es el que ha obtenido la mejor accuracy en validación.
 - El modelo con learning rate = 0.0001 empeora ha sufrido un empeoramiento significativo del accuracy a partir de la primera época. Esto podría ser debido a que, con un learning rate tan bajo, e medida que el modelo va aprendiendo y se van incluyendo imágenes nuevas, el optimizador no es capaz de realizar los cambios necesarios en los pesos de la red para mejorar la predicción.
-- En todos los casos, observanmos una diferencia de accuracy en train y validación de al menos 6 puntos porcentuales. Esto indica la presencia clara de overfitting, que podría evitarse con técnicas como el dropout o la regularización L2.
+- En todos los casos, observanmos una diferencia de accuracy en train y validación de al menos 6 puntos porcentuales. Esto indica la presencia clara de overfitting, que podría haberse evitado reduciendo el número de épocas, o empleando técnicas como el dropout o la regularización L2.
 - El uso de `learning rate scheduler` ha permitido mejorar la convergencia del modelo, ya que el learning rate se ha ido ajustando a medida que el modelo iba aprendiendo. Esto se puede observar en la gráfica de accuracy, donde la curva de validación es más suave y presenta menos picos.
 
 #### **3.1.2 Comparación entre modelos**
@@ -88,7 +96,7 @@ Como se puede observar, `ConvNeXt-Large` supera a `EfficientNet-B0` de manera s�
 
 #### **3.1.3 Obtención de métricas por clase**
 
-...
+GRÁFICA ÁNGEL Y CONTEMPLAR ENSABLAMDO MODELOS CNN
 
 ### **3.2 Despliegue de una app en `Streamlit`**
 
@@ -96,7 +104,12 @@ Para el despliegue de la aplicación, se ha utilizado `Streamlit`, una herramien
 
 #### **3.2.1 Ejecución**
 
-Para ejecutar la aplicación, es necesario ejecutar el siguiente comando en la terminal:
+Para ejecutar la aplicación, existen dos maneras.
+
+En primer lugar, se puede acceder a través del siguiente enlace:
+[Streamlit App](https://idealistai.streamlit.app/)
+
+Por otro lado, si se desea ejecutar en local, basta con ejecutar el siguiente comando en la terminal:
 
 ```bash
 streamlit run app.py
@@ -105,6 +118,8 @@ streamlit run app.py
 Esto abrirá una nueva ventana en el navegador, donde se podrá interactuar con la aplicación.
 
 #### **3.2.2 Resultados**
+
+A modo de ejemplo,
 
 ### **4. Conclusiones**
 
