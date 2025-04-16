@@ -5,7 +5,8 @@ import os
 import torchvision.models as models
 import torch.nn as nn
 import streamlit as st
-from models_generator.training_validation_models.prediction_pipeline_modelos import (
+
+from models_generator.prediction_pipeline_modelos import (
     prediction_process,
     process_image,
 )
@@ -22,8 +23,17 @@ st.write(
 # Model selection
 model_name = st.selectbox(
     "Choose the model",
-    ["efficientnet_b0"],
+    [
+        "convnext_large_1_epoch",
+        "convnext_large_2_epochs_0.0001_lr",
+        "convnext_large_5_epochs_0.001_lr",
+        "convnext_large_5_epochs_0.0005_lr",
+        "convnext_large_epoch_3",
+        "efficientnet_b0",
+        "efficientnet_b0_5epochs_0.0005_lr",
+    ],
 )
+
 
 # Upload image
 uploaded_file = st.file_uploader(

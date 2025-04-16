@@ -205,3 +205,37 @@
 2025-04-15 19:49:51,367 - INFO - 3. efficientnet_b0_5epochs_0: Precisión = 89.47%, Loss = 0.3380
 2025-04-15 19:49:51,367 - INFO - 4. convnext_large_1_epoch: Precisión = 0.80%, Loss = 2.7821
 2025-04-15 19:49:51,565 - INFO - Gráfico de comparación guardado en ../images/results/model_comparison.png
+2025-04-16 15:25:48,542 - INFO - Usando CPU
+2025-04-16 15:25:48,562 - INFO - Dataset de validación cargado con 1500 imágenes.
+2025-04-16 15:25:48,562 - INFO - Clases encontradas: ['Bedroom', 'Coast', 'Forest', 'Highway', 'Industrial', 'Inside city', 'Kitchen', 'Living room', 'Mountain', 'Office', 'Open country', 'Store', 'Street', 'Suburb', 'Tall building']
+2025-04-16 15:25:48,562 - INFO - 
+==================================================
+2025-04-16 15:25:48,562 - INFO - Evaluando el modelo: convnext_large_5_epochs_0
+2025-04-16 15:25:48,562 - INFO - Cargando el modelo: convnext_large_5_epochs_0
+2025-04-16 15:25:56,559 - INFO - ConvNeXt Large model selected
+2025-04-16 15:25:57,457 - INFO - Pesos cargados correctamente para convnext_large_5_epochs_0
+2025-04-16 15:35:22,227 - INFO - Loss promedio: 0.5126
+2025-04-16 15:35:22,230 - INFO - Precisión global: 86.33%
+2025-04-16 15:35:22,230 - INFO - Precisión por clase:
+2025-04-16 15:35:22,230 - INFO - Bedroom: 77.00%
+2025-04-16 15:35:22,230 - INFO - Coast: 91.00%
+2025-04-16 15:35:22,230 - INFO - Forest: 99.00%
+2025-04-16 15:35:22,231 - INFO - Highway: 99.00%
+2025-04-16 15:35:22,231 - INFO - Industrial: 88.00%
+2025-04-16 15:35:22,231 - INFO - Inside city: 85.00%
+2025-04-16 15:35:22,231 - INFO - Kitchen: 33.00%
+2025-04-16 15:35:22,231 - INFO - Living room: 96.00%
+2025-04-16 15:35:22,231 - INFO - Mountain: 95.00%
+2025-04-16 15:35:22,231 - INFO - Office: 60.00%
+2025-04-16 15:35:22,231 - INFO - Open country: 86.00%
+2025-04-16 15:35:22,232 - INFO - Store: 96.00%
+2025-04-16 15:35:22,232 - INFO - Street: 96.00%
+2025-04-16 15:35:22,232 - INFO - Suburb: 100.00%
+2025-04-16 15:35:22,232 - INFO - Tall building: 94.00%
+2025-04-16 15:35:22,923 - INFO - Gráfico guardado en ../images/results/convnext_large_5_epochs_0_class_accuracy.png
+2025-04-16 15:35:49,643 - INFO - 
+==================================================
+2025-04-16 15:35:49,643 - INFO - Evaluando el modelo: convnext_large_2_epochs_0
+2025-04-16 15:35:49,643 - INFO - Cargando el modelo: convnext_large_2_epochs_0
+2025-04-16 15:36:00,369 - INFO - ConvNeXt Large model selected
+2025-04-16 15:36:02,147 - INFO - Pesos cargados correctamente para convnext_large_2_epochs_0
