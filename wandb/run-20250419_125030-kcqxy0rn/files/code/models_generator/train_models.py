@@ -148,7 +148,7 @@ def build_model(model_name, num_classes):
     return model
 
 # Function to train the model
-def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=False, epochs=5, batch_size=8):
+def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
     try:
         logging.info(f"Starting training on rank {rank}")
 
@@ -188,8 +188,7 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
 
         # Set up optimizer, learning rate scheduler, and loss function
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-        if set_scheduler:
-            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
         criterion = nn.CrossEntropyLoss()
 
         # Inicialize training loop
@@ -235,8 +234,7 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
                 }
             )
 
-            if set_scheduler:
-                scheduler.step()
+            scheduler.step()
 
         try:
             os.makedirs("./models_generator/models", exist_ok=True)
@@ -255,12 +253,10 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
 # Main function to prompt user for input and start training
 def main():
 
-    logging.info("---NEW TRAINING SESSION---")
-
     # Prompt the user to enter the CNN model to train via the terminal
     model_choice = input("Enter the CNN model name to train (e.g.: convnext_large or efficientnet_b0): ").strip()
 
-    # Learning rate 
+    # Learning rate
     while True:
         lr_input = input("Enter the learning rate (e.g.: 0.0005): ").strip()
         try:
@@ -269,20 +265,6 @@ def main():
             break
         except ValueError:
             logging.warning(f"Invalid learning rate input: '{lr_input}'. Please enter a valid float.")
-
-    # Learning rate scheduler
-    while True:
-        set_scheduler = input("Do you want to use learning rate scheduler? (yes / no)").strip().lower()
-        if set_scheduler not in ["yes", "no"]:
-            raise ValueError("Invalid input. Please enter 'yes' or 'no'.")
-        if set_scheduler == "yes":
-            set_scheduler = True
-            logging.info("Using learning rate scheduler")
-            break
-        elif set_scheduler == "no":
-            set_scheduler = False
-            logging.info("Not using learning rate scheduler")
-            break
 
     # Number of epochs
     while True:
@@ -312,7 +294,6 @@ def main():
         world_size=world_size,
         model_choice=model_choice,
         learning_rate=learning_rate,
-        set_scheduler=set_scheduler,
         epochs=epochs,
         batch_size=batch_size
     )

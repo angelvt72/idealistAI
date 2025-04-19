@@ -1,0 +1,29 @@
+2025-04-18 23:09:49,926 - INFO - Number of classes: 15
+2025-04-18 23:09:49,927 - INFO - Training set size: 2985
+2025-04-18 23:09:49,935 - INFO - Using Apple Silicon GPU (MPS)
+2025-04-18 23:09:52,738 - INFO - ConvNeXt Large model selected
+2025-04-18 23:09:52,952 - INFO - Starting training loop
+2025-04-18 23:10:13,891 - INFO - Epoch 1, Batch 0, Loss: 2.7607, Train Accuracy: 0.00%
+Traceback (most recent call last):
+  File "/Users/Charly_1/Desktop/MASTER/2º Cuatri y anuales/ML II/5 - Deep Learning/idealistAI/models_generator/train_models.py", line 273, in <module>
+    main()
+  File "/Users/Charly_1/Desktop/MASTER/2º Cuatri y anuales/ML II/5 - Deep Learning/idealistAI/models_generator/train_models.py", line 262, in main
+    train(
+  File "/Users/Charly_1/Desktop/MASTER/2º Cuatri y anuales/ML II/5 - Deep Learning/idealistAI/models_generator/train_models.py", line 205, in train
+    optimizer.step()
+  File "/opt/miniconda3/envs/dl_lab/lib/python3.12/site-packages/torch/optim/lr_scheduler.py", line 75, in wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/dl_lab/lib/python3.12/site-packages/torch/optim/optimizer.py", line 385, in wrapper
+    out = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/dl_lab/lib/python3.12/site-packages/torch/optim/optimizer.py", line 76, in _use_grad
+    ret = func(self, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/dl_lab/lib/python3.12/site-packages/torch/optim/adam.py", line 166, in step
+    adam(
+  File "/opt/miniconda3/envs/dl_lab/lib/python3.12/site-packages/torch/optim/adam.py", line 316, in adam
+    func(params,
+  File "/opt/miniconda3/envs/dl_lab/lib/python3.12/site-packages/torch/optim/adam.py", line 391, in _single_tensor_adam
+    exp_avg.lerp_(grad, 1 - beta1)
+KeyboardInterrupt

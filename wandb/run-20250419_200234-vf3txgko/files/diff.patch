@@ -1,0 +1,245 @@
+diff --git a/models_generator/train_models.py b/models_generator/train_models.py
+index aabef15..e43ff27 100644
+--- a/models_generator/train_models.py
++++ b/models_generator/train_models.py
+@@ -16,11 +16,10 @@ logging.basicConfig(
+     format="%(asctime)s - %(levelname)s - %(message)s",
+     handlers=[
+         logging.StreamHandler(sys.stdout),
+-        logging.FileHandler("../logs/training_log.txt"),
++        logging.FileHandler("logs/training_log.txt"),
+     ],
+ )
+ 
+-
+ # Function to set up the device for training
+ def get_device():
+     """
+@@ -40,7 +39,6 @@ def get_device():
+         logging.info("Using CPU")
+     return device
+ 
+-
+ # Function to determine the number of workers for DataLoader
+ def get_num_workers(default_max=8):
+     """
+@@ -51,9 +49,9 @@ def get_num_workers(default_max=8):
+     logging.info(f"Configured number of workers: {num_workers}")
+     return num_workers
+ 
+-
+ # Function to load training and validation data
+ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
++
+     # Data transformations
+     transform = torchvision.transforms.Compose(
+         [
+@@ -70,12 +68,15 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
+     if not os.path.exists(valid_dir):
+         raise ValueError(f"Validation directory does not exist: {valid_dir}")
+ 
++    # Load datasets
+     train_dataset = torchvision.datasets.ImageFolder(train_dir, transform=transform)
+     valid_dataset = torchvision.datasets.ImageFolder(valid_dir, transform=transform)
+ 
++    # Set number of workers and pin_memory based on device availability
+     num_workers = get_num_workers()
+     pin_memory = True if torch.cuda.is_available() else False
+ 
++    # Create DataLoader for training and validation datasets
+     train_loader = DataLoader(
+         train_dataset,
+         batch_size=batch_size,
+@@ -94,7 +95,6 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
+ 
+     return train_loader, valid_loader, len(train_dataset.classes)
+ 
+-
+ # Function to evaluate the model on the validation set
+ def evaluate(model, valid_loader, criterion, device):
+     model.eval()
+@@ -114,10 +114,12 @@ def evaluate(model, valid_loader, criterion, device):
+     accuracy = 100 * correct_predictions / total_predictions
+     return avg_loss, accuracy
+ 
+-
+ # Helper function to build and configure the model based on the user's choice.
+ def build_model(model_name, num_classes):
++
++    # Clean model name input
+     model_name = model_name.lower().strip()
++
+     if model_name == "convnext_large":
+ 
+         # Load pre-trained ConvNeXt Large
+@@ -145,9 +147,8 @@ def build_model(model_name, num_classes):
+         )
+     return model
+ 
+-
+ # Function to train the model
+-def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
++def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=False, epochs=5, batch_size=8):
+     try:
+         logging.info(f"Starting training on rank {rank}")
+ 
+@@ -167,8 +168,8 @@ def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
+                 "epochs": epochs,
+                 "batch_size": train_loader.batch_size,
+             },
+-            name=f"{model_choice}_{epochs}_epochs_{learning_rate}_lr",
+-        )
++            name=f"{model_choice}_{epochs}_epochs_{learning_rate}_lr_2",
++        )   
+ 
+         logging.info(f"Number of classes: {num_classes}")
+         logging.info(f"Training set size: {len(train_loader.dataset)}")
+@@ -185,10 +186,13 @@ def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
+ 
+         model = model.to(device)
+ 
++        # Set up optimizer, learning rate scheduler, and loss function
+         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
++        if set_scheduler:
++            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+         criterion = nn.CrossEntropyLoss()
+ 
++        # Inicialize training loop
+         logging.info("Starting training loop")
+         for epoch in range(epochs):
+             model.train()
+@@ -219,6 +223,7 @@ def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
+                 f"Epoch {epoch+1}, Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%"
+             )
+ 
++            # Log metrics to W&B
+             wandb.log(
+                 {
+                     "epoch": epoch,
+@@ -230,13 +235,15 @@ def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
+                 }
+             )
+ 
+-            scheduler.step()
++            if set_scheduler:
++                scheduler.step()
+ 
+         try:
+             os.makedirs("./models_generator/models", exist_ok=True)
+         except Exception as e:
+             pass
+ 
++        # Save the model
+         model_path = f"./models_generator/models/{model_choice}_{epochs}epochs_{learning_rate}_lr.pt"
+         torch.save(model.state_dict(), model_path)
+         logging.info(f"Model saved successfully at {model_path}")
+@@ -245,29 +252,71 @@ def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
+     except Exception as e:
+         logging.error(f"Error during training: {e}", exc_info=True)
+ 
+-
+ # Main function to prompt user for input and start training
+ def main():
++
++    logging.info("---NEW TRAINING SESSION---")
++
+     # Prompt the user to enter the CNN model to train via the terminal
+-    model_choice = input(
+-        "Enter the CNN model name to train (e.g.: convnext_large or efficientnet_b0): "
+-    ).strip()
++    model_choice = input("Enter the CNN model name to train (e.g.: convnext_large or efficientnet_b0): ").strip()
+ 
+-    # Ask the user for learning rate, number of epochs and batch size
+-    learning_rate = float(input("Enter the learning rate (e.g.: 0.0005): ").strip())
+-    epochs = int(input("Enter the number of epochs (e.g.: 5): ").strip())
+-    batch_size = int(input("Enter the batch size (e.g.: 8): ").strip())
++    # Learning rate 
++    while True:
++        lr_input = input("Enter the learning rate (e.g.: 0.0005): ").strip()
++        try:
++            learning_rate = float(lr_input)
++            logging.info(f"Learning rate set to: {learning_rate}")
++            break
++        except ValueError:
++            logging.warning(f"Invalid learning rate input: '{lr_input}'. Please enter a valid float.")
++
++    # Learning rate scheduler
++    while True:
++        set_scheduler = input("Do you want to use learning rate scheduler? (yes / no)").strip().lower()
++        if set_scheduler not in ["yes", "no"]:
++            raise ValueError("Invalid input. Please enter 'yes' or 'no'.")
++        if set_scheduler == "yes":
++            set_scheduler = True
++            logging.info("Using learning rate scheduler")
++            break
++        elif set_scheduler == "no":
++            set_scheduler = False
++            logging.info("Not using learning rate scheduler")
++            break
++
++    # Number of epochs
++    while True:
++        epochs_input = input("Enter the number of epochs (e.g.: 5): ").strip()
++        try:
++            epochs = int(epochs_input)
++            logging.info(f"Number of epochs set to: {epochs}")
++            break
++        except ValueError:
++            logging.warning(f"Invalid epochs input: '{epochs_input}'. Please enter a valid integer.")
++
++    # Batch size
++    while True:
++        batch_input = input("Enter the batch size (e.g.: 8): ").strip()
++        try:
++            batch_size = int(batch_input)
++            logging.info(f"Batch size set to: {batch_size}")
++            break
++        except ValueError:
++            logging.warning(f"Invalid batch size input: '{batch_input}'. Please enter a valid integer.")
+ 
+     world_size = 1  # In this example a single device is used
++
++    # Train the model
+     train(
+         rank=0,
+         world_size=world_size,
+         model_choice=model_choice,
+         learning_rate=learning_rate,
++        set_scheduler=set_scheduler,
+         epochs=epochs,
+-        batch_size=batch_size,
++        batch_size=batch_size
+     )
+-
++    logging.info("Training completed successfully.")
+ 
+ if __name__ == "__main__":
+     main()
+diff --git a/wandb/debug-internal.log b/wandb/debug-internal.log
+index c0d2cb0..726224e 120000
+--- a/wandb/debug-internal.log
++++ b/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20250414_210138-emc7bted/logs/debug-internal.log
+\ No newline at end of file
++run-20250419_200234-vf3txgko/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/wandb/debug.log b/wandb/debug.log
+index e1622a9..5124be2 120000
+--- a/wandb/debug.log
++++ b/wandb/debug.log
+@@ -1 +1 @@
+-run-20250414_210138-emc7bted/logs/debug.log
+\ No newline at end of file
++run-20250419_200234-vf3txgko/logs/debug.log
+\ No newline at end of file
+diff --git a/wandb/latest-run b/wandb/latest-run
+index 70e5a91..afc10cf 120000
+--- a/wandb/latest-run
++++ b/wandb/latest-run
+@@ -1 +1 @@
+-run-20250414_210138-emc7bted
+\ No newline at end of file
++run-20250419_200234-vf3txgko
+\ No newline at end of file

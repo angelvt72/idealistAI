@@ -1,0 +1,17 @@
+{"time":"2025-04-19T20:03:11.927993+02:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/Users/Charly_1/Desktop/MASTER/2º Cuatri y anuales/ML II/5 - Deep Learning/idealistAI/wandb/run-20250419_200311-yywv0xja/logs/debug-core.log"}
+{"time":"2025-04-19T20:03:12.034744+02:00","level":"INFO","msg":"created new stream","id":"yywv0xja"}
+{"time":"2025-04-19T20:03:12.034775+02:00","level":"INFO","msg":"stream: started","id":"yywv0xja"}
+{"time":"2025-04-19T20:03:12.034791+02:00","level":"INFO","msg":"handler: started","stream_id":"yywv0xja"}
+{"time":"2025-04-19T20:03:12.034803+02:00","level":"INFO","msg":"writer: Do: started","stream_id":"yywv0xja"}
+{"time":"2025-04-19T20:03:12.034821+02:00","level":"INFO","msg":"sender: started","stream_id":"yywv0xja"}
+{"time":"2025-04-19T20:03:12.317322+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-20T00:35:43.011801+02:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/jcriego-prsoria-angelvt/Understanding-CNNs/yywv0xja/file_stream\": read tcp 192.168.1.34:64874->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-04-20T00:43:19.596775+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-20T00:43:19.599284+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-20T00:43:20.379366+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-20T00:43:20.608738+02:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-04-20T00:43:20.630137+02:00","level":"INFO","msg":"stream: closing","id":"yywv0xja"}
+{"time":"2025-04-20T00:43:20.630205+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":"yywv0xja"}
+{"time":"2025-04-20T00:43:20.630368+02:00","level":"INFO","msg":"handler: closed","stream_id":"yywv0xja"}
+{"time":"2025-04-20T00:43:20.630405+02:00","level":"INFO","msg":"sender: closed","stream_id":"yywv0xja"}
+{"time":"2025-04-20T00:43:20.637492+02:00","level":"INFO","msg":"stream: closed","id":"yywv0xja"}

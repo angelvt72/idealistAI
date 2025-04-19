@@ -27,10 +27,11 @@ model_name = st.selectbox(
         "convnext_large_1_epoch",
         "convnext_large_2_epochs_0.0001_lr",
         "convnext_large_5_epochs_0.001_lr",
-        "convnext_large_5_epochs_0.0005_lr",
-        "convnext_large_epoch_3",
+        "convnext_large_5epochs_0.0005_lr_lr-scheduler_on",
+        "convnext_large_3_epochs",
+        "convnext_large_5epochs_0.0001_lr",
         "efficientnet_b0",
-        "efficientnet_b0_5epochs_0.0005_lr",
+        "efficientnet_b0_5epochs_0.0005_lr_lr-scheduler_on",
     ],
 )
 

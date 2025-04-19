@@ -1,0 +1,21 @@
+{"time":"2025-04-18T23:11:10.8694+02:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/Users/Charly_1/Desktop/MASTER/2º Cuatri y anuales/ML II/5 - Deep Learning/idealistAI/wandb/run-20250418_231110-wnk7ypc2/logs/debug-core.log"}
+{"time":"2025-04-18T23:11:10.975703+02:00","level":"INFO","msg":"created new stream","id":"wnk7ypc2"}
+{"time":"2025-04-18T23:11:10.975752+02:00","level":"INFO","msg":"stream: started","id":"wnk7ypc2"}
+{"time":"2025-04-18T23:11:10.97575+02:00","level":"INFO","msg":"handler: started","stream_id":"wnk7ypc2"}
+{"time":"2025-04-18T23:11:10.975752+02:00","level":"INFO","msg":"writer: Do: started","stream_id":"wnk7ypc2"}
+{"time":"2025-04-18T23:11:10.975819+02:00","level":"INFO","msg":"sender: started","stream_id":"wnk7ypc2"}
+{"time":"2025-04-18T23:11:11.27013+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-18T23:26:30.733005+02:00","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/jcriego-prsoria-angelvt/Understanding-CNNs/wnk7ypc2/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2025-04-18T23:26:38.25131+02:00","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/jcriego-prsoria-angelvt/Understanding-CNNs/wnk7ypc2/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2025-04-18T23:26:41.637933+02:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-04-18T23:42:05.573923+02:00","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/jcriego-prsoria-angelvt/Understanding-CNNs/wnk7ypc2/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2025-04-18T23:42:12.767073+02:00","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/jcriego-prsoria-angelvt/Understanding-CNNs/wnk7ypc2/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2025-04-19T03:51:29.507786+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-19T03:51:29.509733+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-19T03:51:30.329949+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-19T03:51:30.557464+02:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 4-4, summary, console lines 199-200","runtime_seconds":0.22710975}],"total_operations":1}}
+{"time":"2025-04-19T03:51:30.6596+02:00","level":"INFO","msg":"stream: closing","id":"wnk7ypc2"}
+{"time":"2025-04-19T03:51:30.659635+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":"wnk7ypc2"}
+{"time":"2025-04-19T03:51:30.659753+02:00","level":"INFO","msg":"handler: closed","stream_id":"wnk7ypc2"}
+{"time":"2025-04-19T03:51:30.659851+02:00","level":"INFO","msg":"sender: closed","stream_id":"wnk7ypc2"}
+{"time":"2025-04-19T03:51:30.659869+02:00","level":"INFO","msg":"stream: closed","id":"wnk7ypc2"}

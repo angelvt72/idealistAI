@@ -5,7 +5,7 @@ import os
 import torchvision.models as models
 import torch.nn as nn
 import streamlit as st
-from models_generator.training_validation_models.prediction_pipeline_modelos import (
+from models_generator.prediction_pipeline_modelos import (
     prediction_process,
     process_image,
 )

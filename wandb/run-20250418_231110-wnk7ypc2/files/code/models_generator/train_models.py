@@ -20,6 +20,7 @@ logging.basicConfig(
     ],
 )
 
+
 # Function to set up the device for training
 def get_device():
     """
@@ -39,6 +40,7 @@ def get_device():
         logging.info("Using CPU")
     return device
 
+
 # Function to determine the number of workers for DataLoader
 def get_num_workers(default_max=8):
     """
@@ -49,9 +51,9 @@ def get_num_workers(default_max=8):
     logging.info(f"Configured number of workers: {num_workers}")
     return num_workers
 
+
 # Function to load training and validation data
 def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
-
     # Data transformations
     transform = torchvision.transforms.Compose(
         [
@@ -68,15 +70,12 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
     if not os.path.exists(valid_dir):
         raise ValueError(f"Validation directory does not exist: {valid_dir}")
 
-    # Load datasets
     train_dataset = torchvision.datasets.ImageFolder(train_dir, transform=transform)
     valid_dataset = torchvision.datasets.ImageFolder(valid_dir, transform=transform)
 
-    # Set number of workers and pin_memory based on device availability
     num_workers = get_num_workers()
     pin_memory = True if torch.cuda.is_available() else False
 
-    # Create DataLoader for training and validation datasets
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -94,6 +93,7 @@ def load_data(train_dir, valid_dir, batch_size=8, img_size=224):
     )
 
     return train_loader, valid_loader, len(train_dataset.classes)
+
 
 # Function to evaluate the model on the validation set
 def evaluate(model, valid_loader, criterion, device):
@@ -114,12 +114,10 @@ def evaluate(model, valid_loader, criterion, device):
     accuracy = 100 * correct_predictions / total_predictions
     return avg_loss, accuracy
 
+
 # Helper function to build and configure the model based on the user's choice.
 def build_model(model_name, num_classes):
-
-    # Clean model name input
     model_name = model_name.lower().strip()
-
     if model_name == "convnext_large":
 
         # Load pre-trained ConvNeXt Large
@@ -147,8 +145,9 @@ def build_model(model_name, num_classes):
         )
     return model
 
+
 # Function to train the model
-def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=False, epochs=5, batch_size=8):
+def train(rank, world_size, model_choice, learning_rate, epochs, batch_size):
     try:
         logging.info(f"Starting training on rank {rank}")
 
@@ -186,13 +185,10 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
 
         model = model.to(device)
 
-        # Set up optimizer, learning rate scheduler, and loss function
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-        if set_scheduler:
-            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
         criterion = nn.CrossEntropyLoss()
 
-        # Inicialize training loop
         logging.info("Starting training loop")
         for epoch in range(epochs):
             model.train()
@@ -223,7 +219,6 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
                 f"Epoch {epoch+1}, Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%"
             )
 
-            # Log metrics to W&B
             wandb.log(
                 {
                     "epoch": epoch,
@@ -235,15 +230,13 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
                 }
             )
 
-            if set_scheduler:
-                scheduler.step()
+            scheduler.step()
 
         try:
             os.makedirs("./models_generator/models", exist_ok=True)
         except Exception as e:
             pass
 
-        # Save the model
         model_path = f"./models_generator/models/{model_choice}_{epochs}epochs_{learning_rate}_lr.pt"
         torch.save(model.state_dict(), model_path)
         logging.info(f"Model saved successfully at {model_path}")
@@ -252,71 +245,29 @@ def train(rank, world_size, model_choice, learning_rate=0.0005, set_scheduler=Fa
     except Exception as e:
         logging.error(f"Error during training: {e}", exc_info=True)
 
+
 # Main function to prompt user for input and start training
 def main():
-
-    logging.info("---NEW TRAINING SESSION---")
-
     # Prompt the user to enter the CNN model to train via the terminal
-    model_choice = input("Enter the CNN model name to train (e.g.: convnext_large or efficientnet_b0): ").strip()
+    model_choice = input(
+        "Enter the CNN model name to train (e.g.: convnext_large or efficientnet_b0): "
+    ).strip()
 
-    # Learning rate 
-    while True:
-        lr_input = input("Enter the learning rate (e.g.: 0.0005): ").strip()
-        try:
-            learning_rate = float(lr_input)
-            logging.info(f"Learning rate set to: {learning_rate}")
-            break
-        except ValueError:
-            logging.warning(f"Invalid learning rate input: '{lr_input}'. Please enter a valid float.")
-
-    # Learning rate scheduler
-    while True:
-        set_scheduler = input("Do you want to use learning rate scheduler? (yes / no)").strip().lower()
-        if set_scheduler not in ["yes", "no"]:
-            raise ValueError("Invalid input. Please enter 'yes' or 'no'.")
-        if set_scheduler == "yes":
-            set_scheduler = True
-            logging.info("Using learning rate scheduler")
-            break
-        elif set_scheduler == "no":
-            set_scheduler = False
-            logging.info("Not using learning rate scheduler")
-            break
-
-    # Number of epochs
-    while True:
-        epochs_input = input("Enter the number of epochs (e.g.: 5): ").strip()
-        try:
-            epochs = int(epochs_input)
-            logging.info(f"Number of epochs set to: {epochs}")
-            break
-        except ValueError:
-            logging.warning(f"Invalid epochs input: '{epochs_input}'. Please enter a valid integer.")
-
-    # Batch size
-    while True:
-        batch_input = input("Enter the batch size (e.g.: 8): ").strip()
-        try:
-            batch_size = int(batch_input)
-            logging.info(f"Batch size set to: {batch_size}")
-            break
-        except ValueError:
-            logging.warning(f"Invalid batch size input: '{batch_input}'. Please enter a valid integer.")
+    # Ask the user for learning rate, number of epochs and batch size
+    learning_rate = float(input("Enter the learning rate (e.g.: 0.0005): ").strip())
+    epochs = int(input("Enter the number of epochs (e.g.: 5): ").strip())
+    batch_size = int(input("Enter the batch size (e.g.: 8): ").strip())
 
     world_size = 1  # In this example a single device is used
-
-    # Train the model
     train(
         rank=0,
         world_size=world_size,
         model_choice=model_choice,
         learning_rate=learning_rate,
-        set_scheduler=set_scheduler,
         epochs=epochs,
-        batch_size=batch_size
+        batch_size=batch_size,
     )
-    logging.info("Training completed successfully.")
+
 
 if __name__ == "__main__":
     main()
