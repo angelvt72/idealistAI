@@ -110,9 +110,23 @@ In this section, the learning rate was set to 0.0005 with a learning rate schedu
 
 As can be observed, ConvNeXt-Large consistently outperforms EfficientNet-B0 in this problem. The reason for this could be that, despite the high efficiency of EfficientNet-B0 (around 5.3M parameters), ConvNeXt-Large, with approximately 198M parameters, offers a greater capacity to learn complex and detailed representations, which translates into superior performance in accuracy and generalization.
 
-#### **3.1.3 Obtaining Metrics by Class**
+#### **3.1.3 Class‑wise Metrics**
 
-[ANGEL'S GRAPH AND CONSIDERATION OF ENSEMBLING CNN MODELS]
+To ensure the consistency of our models, we evaluated the class‑wise accuracy of the two top‑performing architectures discussed previously (`ConvNeXt‑Large` and `EfficientNet‑B0`) on the validation set. These results align with the overall validation accuracy logged in Weights & Biases:
+
+> **Note:** The models used for validation are the latest checkpoints saved in W&B (i.e., those with the most recent weights).
+
+<figure>
+  <img src="images/results/convnext_large_5_epochs_0_class_accuracy.png" alt="Class‑wise Validation Accuracy for ConvNeXt‑Large" width="600">
+  <figcaption>Figure 5. Class‑wise validation accuracy of ConvNeXt‑Large (learning rate = 0.0005).</figcaption>
+</figure>
+
+<figure>
+  <img src="images/results/efficientnet_b0_5epochs_0_class_accuracy.png" alt="Class‑wise Validation Accuracy for EfficientNet‑B0" width="600">
+  <figcaption>Figure 6. Class‑wise validation accuracy of EfficientNet‑B0 (learning rate = 0.0005).</figcaption>
+</figure>
+
+While some classes achieve near‑perfect accuracy, others only reach around 70%. This discrepancy suggests that an ensemble approach—such as stacking these two models with per‑class weighting—might yield better overall predictions.
 
 ### **3.2 Deployment of a Streamlit App**
 

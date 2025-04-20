@@ -22,9 +22,7 @@ st.write(
 # Model selection
 model_name = st.selectbox(
     "Choose the model",
-    [
-        "efficientnet_b0",
-    ],
+    ["efficientnet_b0_5epochs_0.0005_lr"],
 )
 
 # Upload image
