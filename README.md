@@ -83,7 +83,7 @@ From these results, we can conclude the following:
 
 - The optimal learning rate among those tested for this model is 0.0005, as it achieved the best validation accuracy.
 - The model with learning rate = 0.0001 experienced a significant deterioration in accuracy after the first epoch. This could be due to the fact that, with such a low learning rate, as the model learns and new images are included, the optimizer is unable to make the necessary changes to the network weights to improve prediction.
-- In all cases, we observe a difference in accuracy between training and validation of at least 6 percentage points. This clearly indicates the presence of overfitting, which could have been prevented by reducing the number of epochs or using techniques such as dropout or L2 regularization.
+- In all cases, we observe a difference in accuracy between training and validation of at least 6 percentage points. This clearly indicates the presence of overfitting, which could have been prevented by reducing the number of epochs or using techniques such as early stopping, dropout or L2 regularization.
 - The use of a learning rate scheduler has improved model convergence, as the learning rate has been adjusted as the model learned. This can be observed in the accuracy graph, where the validation curve is smoother and shows fewer peaks.
 
 #### **3.1.2 Comparison Between Models**
@@ -170,6 +170,6 @@ In this project, the following conclusions have been drawn:
 
 3. The ConvNeXt-Large model has proven to be superior to EfficientNet-B0 in this problem, highlighting the improvement that comes with increasing the number of model parameters, at the cost of longer training time and resource usage.
 
-4. Overfitting has been the biggest challenge identified in this project, and in future implementations, parameters such as the number of epochs should be adjusted, or techniques such as dropout or L2 regularization should be employed to avoid it.
+4. Overfitting has been the biggest challenge identified in this project, and in future implementations, parameters such as the number of epochs should be adjusted, or techniques such as early stopping, dropout or L2 regularization should be employed to avoid it.
 
 5. In order to achieve adequate precision across all classes, the ideal approach would be to implement an ensemble model that combines the results of several models to improve the accuracy and robustness of the system.
