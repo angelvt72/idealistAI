@@ -373,7 +373,7 @@ def main():
     parser.add_argument(
         "--model_dir",
         type=str,
-        default="./models",
+        default="../models",
         help="Directorio donde se encuentran los modelos",
     )
     parser.add_argument(

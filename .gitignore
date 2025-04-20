@@ -1,2 +1,4 @@
-models/
 dataset/
+models/
+logs/
+wandb/
