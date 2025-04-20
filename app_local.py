@@ -25,7 +25,7 @@ model_name = st.selectbox(
     "Choose the model",
     [
         "convnext_large_5_epochs_0.001_lr",
-        "convnext_large_5epochs_0.0005_lr",
+        "convnext_large_5_epochs_0.0005_lr",
         "convnext_large_5epochs_0.0001_lr",
         "efficientnet_b0_5epochs_0.0005_lr",
     ],

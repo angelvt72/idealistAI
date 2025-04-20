@@ -1,4 +1,10 @@
+# Ignorar dataset, logs y wandb
 dataset/
-models/
 logs/
 wandb/
+
+# Ignorar todos los archivos dentro de models
+models_generator/models/*
+
+# ¡EXCEPTO! el archivo exacto que sí quieres seguir
+!models_generator/models/efficientnet_b0_5epochs_0.0005_lr.pt
